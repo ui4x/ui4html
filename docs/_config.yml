@@ -1,0 +1,9 @@
+title: ui4html
+remote_theme: jekyll/minima
+plugins:
+  - jekyll-relative-links
+relative_links:
+  enabled: true
+  collections: true
+minima:
+  skin: dark

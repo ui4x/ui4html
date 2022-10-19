@@ -1,0 +1,34 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>ui4 Example 7</title>
+    <script src="ui4.js"></script>
+    <style>
+        div#root > * {
+            background-color: cornflowerblue;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        div#b {
+            color: black;
+            background-color: #eeeeee;
+        }
+        div#c {
+            color: black;
+            background-color: #eeeeee;
+        }
+    </style>
+</head>
+<body>
+<div id="root" class="ui4Root">
+<div id="b" dock="left" width="40">B</div>
+<div id="c" dock="right" width="40">C</div>
+<div id="a" dock="between(b, c)" size="b.size">A</div>
+</div>
+</body>
+</html>

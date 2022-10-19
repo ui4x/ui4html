@@ -1,0 +1,34 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>[title]</title>
+    <script src="ui4.js"></script>
+    <style>
+        div#resizable > * {
+            background-color: cornflowerblue;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        div#resizable {
+            position: absolute;
+            left: 0;
+            top: 0;
+            resize: both;
+            overflow: auto;
+            width: 80%;
+            height: 80%;
+            border: solid 1px cornflowerblue;
+        }
+    </style>
+</head>
+<body>
+<div id="root" class="ui4Root">
+[content]
+</div>
+</body>
+</html>
