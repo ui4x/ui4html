@@ -1,4 +1,5 @@
 import re
+import shutil
 from pathlib import Path
 
 target_path = Path(__file__).parent.parent / "docs"
@@ -79,3 +80,5 @@ print(f"Examples: {example_number}")
 
 result = "\n".join(lines_out)
 (target_path / "README.md").write_text(result)
+
+shutil.copy(str(Path(__file__).parent.parent / "src" / "ui4.js"), target_path / "examples" / "ui4.js")
