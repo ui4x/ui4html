@@ -1,3 +1,7 @@
+---
+layout: page
+---
+
 Are you looking to create a web application instead of a document?
 Is CSS with its multiple layout engines too complicated for your needs? 
 

@@ -1,3 +1,7 @@
+---
+layout: page
+---
+
 Are you looking to create a web application instead of a document?
 Is CSS with its multiple layout engines too complicated for your needs? 
 
@@ -9,12 +13,12 @@ ui4 provides an alternative for placing UI elements on the screen. Let's look at
     <table class="example">
       <tr>
         <td>
-          <sub>EXAMPLE 2</sub>
+          <sub>EXAMPLE 1</sub>
           <pre>&lt;div id="square" top="top" left="left">&lt;/div></pre>
         </td>
         <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0002.html"></iframe><br/>
-          <button onclick="location.href='examples/example0002.html'">Open in full screen</button>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0001.html"></iframe><br/>
+          <button onclick="location.href='examples/example0001.html'">Open in full screen</button>
         </td>
       </tr>
     </table>
@@ -34,13 +38,13 @@ and `centery`.
     <table class="example">
       <tr>
         <td>
-          <sub>EXAMPLE 3</sub>
+          <sub>EXAMPLE 2</sub>
           <pre>&lt;div id="a" top="b.bottom" left="b.left">A&lt;/div>
 &lt;div id="b" top="top" left="left">B&lt;/div></pre>
         </td>
         <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0003.html"></iframe><br/>
-          <button onclick="location.href='examples/example0003.html'">Open in full screen</button>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0002.html"></iframe><br/>
+          <button onclick="location.href='examples/example0002.html'">Open in full screen</button>
         </td>
       </tr>
     </table>
@@ -54,13 +58,13 @@ of aligning with the edge.
     <table class="example">
       <tr>
         <td>
-          <sub>EXAMPLE 4</sub>
+          <sub>EXAMPLE 3</sub>
           <pre>&lt;div id="a" top="b.bottom-(gap-1)" left="b.left">A&lt;/div>
 &lt;div id="b" top="top" left="left">B&lt;/div></pre>
         </td>
         <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0004.html"></iframe><br/>
-          <button onclick="location.href='examples/example0004.html'">Open in full screen</button>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0003.html"></iframe><br/>
+          <button onclick="location.href='examples/example0003.html'">Open in full screen</button>
         </td>
       </tr>
     </table>
@@ -74,12 +78,12 @@ is used to make sure there is only 1 pixel between A and B, no matter what the g
     <table class="example">
       <tr>
         <td>
-          <sub>EXAMPLE 5</sub>
+          <sub>EXAMPLE 4</sub>
           <pre>&lt;div id="centered" dock="center">&lt;/div></pre>
         </td>
         <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0005.html"></iframe><br/>
-          <button onclick="location.href='examples/example0005.html'">Open in full screen</button>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0004.html"></iframe><br/>
+          <button onclick="location.href='examples/example0004.html'">Open in full screen</button>
         </td>
       </tr>
     </table>
@@ -93,12 +97,12 @@ convenient and easier to read options.
     <table class="example">
       <tr>
         <td>
-          <sub>EXAMPLE 6</sub>
+          <sub>EXAMPLE 5</sub>
           <pre>&lt;div id="topBanner" dock="top" height="30">&lt;/div></pre>
         </td>
         <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0006.html"></iframe><br/>
-          <button onclick="location.href='examples/example0006.html'">Open in full screen</button>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0005.html"></iframe><br/>
+          <button onclick="location.href='examples/example0005.html'">Open in full screen</button>
         </td>
       </tr>
     </table>
@@ -118,12 +122,12 @@ All the options for docking to the parent are:
     <table class="example">
       <tr>
         <td>
-          <sub>EXAMPLE 7</sub>
+          <sub>EXAMPLE 6</sub>
           <pre>&lt;div id="a" dock="b.above" height="30">A&lt;/div></pre>
         </td>
         <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0007.html"></iframe><br/>
-          <button onclick="location.href='examples/example0007.html'">Open in full screen</button>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0006.html"></iframe><br/>
+          <button onclick="location.href='examples/example0006.html'">Open in full screen</button>
         </td>
       </tr>
     </table>
@@ -137,12 +141,12 @@ beside another one and set the shared dimension (width in the example above) to 
     <table class="example">
       <tr>
         <td>
-          <sub>EXAMPLE 8</sub>
+          <sub>EXAMPLE 7</sub>
           <pre>&lt;div id="a" dock="between(b, c)" size="b.size">A&lt;/div></pre>
         </td>
         <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0008.html"></iframe><br/>
-          <button onclick="location.href='examples/example0008.html'">Open in full screen</button>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0007.html"></iframe><br/>
+          <button onclick="location.href='examples/example0007.html'">Open in full screen</button>
         </td>
       </tr>
     </table>
@@ -160,12 +164,12 @@ and position).
     <table class="example">
       <tr>
         <td>
-          <sub>EXAMPLE 9</sub>
+          <sub>EXAMPLE 8</sub>
           <pre>&lt;div id="a" dock="between(b.right, c.left)">A&lt;/div></pre>
         </td>
         <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0009.html"></iframe><br/>
-          <button onclick="location.href='examples/example0009.html'">Open in full screen</button>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0008.html"></iframe><br/>
+          <button onclick="location.href='examples/example0008.html'">Open in full screen</button>
         </td>
       </tr>
     </table>
@@ -176,12 +180,12 @@ and position).
     <table class="example">
       <tr>
         <td>
-          <sub>EXAMPLE 10</sub>
+          <sub>EXAMPLE 9</sub>
           <pre>&lt;div id="one_third" dock="left" width="share(1, 3)">&lt;/div></pre>
         </td>
         <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0010.html"></iframe><br/>
-          <button onclick="location.href='examples/example0010.html'">Open in full screen</button>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0009.html"></iframe><br/>
+          <button onclick="location.href='examples/example0009.html'">Open in full screen</button>
         </td>
       </tr>
     </table>
@@ -197,7 +201,7 @@ Of course, rather than managing sizes like this, you want to...
     <table class="example">
       <tr>
         <td>
-          <sub>EXAMPLE 11</sub>
+          <sub>EXAMPLE 10</sub>
           <pre>&lt;div id="resizable" layout="grid">
     &lt;div>&lt;/div>
     &lt;div>&lt;/div>
@@ -205,8 +209,8 @@ Of course, rather than managing sizes like this, you want to...
 &lt;/div></pre>
         </td>
         <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0011.html"></iframe><br/>
-          <button onclick="location.href='examples/example0011.html'">Open in full screen</button>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0010.html"></iframe><br/>
+          <button onclick="location.href='examples/example0010.html'">Open in full screen</button>
         </td>
       </tr>
     </table>
