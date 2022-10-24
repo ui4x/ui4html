@@ -17,22 +17,16 @@ for file_path in sorted(source_path.glob("*.md")):
     )
 
     # Empty line before code example is necessary to make syntax highlighting work
-    example_snippet = """
-    <table class="example">
-      <tr>
-        <td>
-          <sub>{}</sub>
-          <pre>{}</pre>
-        </td>
-        <td>
-          {}<br/>
-          {}
-        </td>
-      </tr>
-    </table>"""
+    example_snippet = """<sub>{}</sub>
+```html
+{}
+```
+
+{}</br>
+{}"""
 
     running_example = (
-            '<iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="{}"></iframe>'
+        '<iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="{}"></iframe>'
     )
 
     try:
@@ -64,14 +58,14 @@ for file_path in sorted(source_path.glob("*.md")):
 
                 # Lines to show on site
                 example_lines = "\n".join(example_content[slice(start_line, end_line)])
-                example_lines = example_lines.replace("<", "&lt;")  # .replace("\n", "<br/>")
+                # example_lines = example_lines.replace("<", "&lt;")  # .replace("\n", "<br/>")
 
                 # Add example table
                 example_table = example_snippet.format(
                     f"Example {example_number}".upper(),
                     example_lines,
                     running_example.format(f"examples/{example_file_name}"),
-                    f'<button onclick="location.href=\'examples/{example_file_name}\'">Open in full screen</button>'
+                    f'<a href="examples/{example_file_name}">Open in full screen</a>'
                 )
 
                 lines_out.extend(example_table.splitlines())

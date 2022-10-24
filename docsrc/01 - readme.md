@@ -1,20 +1,19 @@
 ---
 layout: page
+title: Basics
 ---
 
-Are you looking to create a web application instead of a document?
-Is CSS with its multiple layout engines too complicated for your needs? 
+ui4 provides an alternative to CSS for placing HTML elements on the screen. Let's look at some
+examples:
 
-ui4 provides an alternative for placing UI elements on the screen. Let's look at some examples:
-
-#### "Connect this to the corner"
+**"Connect this to the corner"**
 
 ```html example solid_sized
 <div id="square" top="top" left="left"></div>
 ```
 
-Pretty close to CSS `top` or `left`, just with the little gaps added between the element and the
-edges of the parent.
+Here we connect the element to the left and top edges of the parent. Unless you say otherwise,
+a standard gap of 8px is left between an element and whatever it is connected to.
 
 Note that there is no need to identify the parent by id, but `left="parent_id.left"` works, and can
 make the layout more readable.
@@ -22,17 +21,28 @@ make the layout more readable.
 In addition to `top` and `left`, you can also use `bottom`, `right`, `width`, `height`, `centerx`
 and `centery`.
 
-#### "Connect A to B"
+**"Can I have an alternative syntax, please"**
+
+```html example solid_sized
+<div id="square" ui4="top=top; left=left"></div>
+```
+
+Instead of separate attributes, you can collect all the connections in one `ui4` attribute,
+separating them with a semicolon. Spaces can be used to make the spec more readable, but have
+no effect on the final result.
+
+**"Connect A to B"**
 
 ```html example solid_sized
 <div id="a" top="b.bottom" left="b.left">A</div>
 <div id="b" top="top" left="left">B</div>
 ```
 
-Same `top` and `left` work with peer elements in an intuitive way, "pushing" against them instead
-of aligning with the edge.
+Same `top`, `left`, `width` etc. work with peer elements in an intuitive way, aligning with the
+edges or size of the peer element instead of the parent. Gap is again left between the elements
+whenever they are "pushing" against each other.
 
-#### "I want them closer"
+**"I want them closer"**
 
 ```html example solid_sized
 <div id="a" top="b.bottom-(gap-1)" left="b.left">A</div>
@@ -41,6 +51,11 @@ of aligning with the edge.
 
 Simple math is available, including `min` and `max`. `gap` is by default 8 (px). In the example it
 is used to make sure there is only 1 pixel between A and B, no matter what the gap has been set to.
+
+> You can change the standard gap of 8 px in these ways:
+> - Adding some modifiers, like in the example above
+> - With a `gap` attribute that sets the default for all the child elements
+> - Setting a global value, e.g. to 4 px with `<script>globalGap(4)</script>`
 
 #### "Just put it in the center"
 

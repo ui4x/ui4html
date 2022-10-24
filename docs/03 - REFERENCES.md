@@ -3,11 +3,7 @@ layout: page
 title: References
 ---
 
-# References
-
-Similar works and things to learn from them:
-
-Practical implementations
+_Similar works and things to learn from them:_
 
 **Apple UIKit constraints**
 - Auto Layout 2011-2016

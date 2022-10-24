@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <title>ui4 Example 8</title>
+    <title>ui4 Example 15</title>
     <script src="ui4.js"></script>
     <style>
         div#root > * {
@@ -35,9 +35,11 @@
 </head>
 <body>
 <div id="root" class="ui4Root">
-<div id="b" dock="left" width="40">B</div>
-<div id="c" dock="right" width="40">C</div>
-<div id="a" dock="between(b, c)" size="b.size">A</div>
+<div id="first" dock="center" width="125" height="50">Hello</div>
+<button id="second" frame="first.frame" 
+        onclick="ui4.set(this, 'top=first.bottom:0.5s')">
+    Click me
+</button>
 </div>
 </body>
 </html>

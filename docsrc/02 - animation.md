@@ -1,8 +1,7 @@
 ---
 layout: page
+title: Animations
 ---
-
-# Animations
 
 If you connect an element to another element with one of the ui4 attributes, and then animate the
 first element with CSS or Javascript, the connected element naturally animates with the first.
