@@ -6,7 +6,9 @@ title: Basics
 ui4 provides an alternative to CSS for placing HTML elements on the screen. Let's look at some
 examples:
 
-**"Connect this to the corner"**
+---------------
+
+# "Connect this to the corner"
 
 ```html example solid_sized
 <div id="square" top="top" left="left"></div>
@@ -21,7 +23,9 @@ make the layout more readable.
 In addition to `top` and `left`, you can also use `bottom`, `right`, `width`, `height`, `centerx`
 and `centery`.
 
-**"Can I have an alternative syntax, please"**
+---------------
+
+## "Can I have an alternative syntax, please"
 
 ```html example solid_sized
 <div id="square" ui4="top=top; left=left"></div>
@@ -31,7 +35,9 @@ Instead of separate attributes, you can collect all the connections in one `ui4`
 separating them with a semicolon. Spaces can be used to make the spec more readable, but have
 no effect on the final result.
 
-**"Connect A to B"**
+---------------
+
+### "Connect A to B"
 
 ```html example solid_sized
 <div id="a" top="b.bottom" left="b.left">A</div>
@@ -42,7 +48,9 @@ Same `top`, `left`, `width` etc. work with peer elements in an intuitive way, al
 edges or size of the peer element instead of the parent. Gap is again left between the elements
 whenever they are "pushing" against each other.
 
-**"I want them closer"**
+---------------
+
+#### "I want them closer"
 
 ```html example solid_sized
 <div id="a" top="b.bottom-(gap-1)" left="b.left">A</div>
@@ -57,7 +65,9 @@ is used to make sure there is only 1 pixel between A and B, no matter what the g
 > - With a `gap` attribute that sets the default for all the child elements
 > - Setting a global value, e.g. to 4 px with `<script>globalGap(4)</script>`
 
-**"Just put it in the center"**
+---------------
+
+##### "Just put it in the center"
 
 ```html example solid_sized
 <div id="centered" dock="center"></div>
@@ -65,6 +75,8 @@ is used to make sure there is only 1 pixel between A and B, no matter what the g
 
 Instead of using the primitives (like `centerx` and `centery` in this case), `dock` provides
 convenient and easier to read options.
+
+---------------
 
 **"This is a top banner"**
 
@@ -81,6 +93,8 @@ All the options for docking to the parent are:
 - `topcenter`, `leftcenter`, `rightcenter`, `bottomcenter`
 - `center`, `all`
 
+---------------
+
 **"Put A above B"**
 
 ```html example solid 1
@@ -90,6 +104,8 @@ All the options for docking to the parent are:
 
 These convenience docking options, `above`, `below`, `rightof` and `leftof`, place the element
 beside another one and set the shared dimension (width in the example above) to be the same.
+
+---------------
 
 **"A should be between these two guys"**
 
@@ -106,13 +122,17 @@ We also use the `size` shorthand instead of specifying `width` and `height` sepa
 available shorthands are `position` (instead of `left` and `top`) and `frame` (matching both size
 and position).
 
-**"No, I mean stretched all the way between them"**
+---------------
+
+**"...no, I mean stretched all the way between them"**
 
 ```html example solid 3
 <div id="b" dock="left" width="40">B</div>
 <div id="c" dock="right" width="40">C</div>
 <div id="a" dock="between(b.right, c.left)">A</div>
 ```
+
+---------------
 
 **"This is a third of the size of the whole thing"**
 
@@ -126,6 +146,8 @@ Because of the gaps, just dividing the width by 3 is not accurate, so we use a c
 for getting "gap-observing" shares of the whole.
 
 Of course, rather than managing sizes like this, you want to...
+
+---------------
 
 **"Just throw some boxes in there"**
 

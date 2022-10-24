@@ -6,7 +6,9 @@ title: Basics
 ui4 provides an alternative to CSS for placing HTML elements on the screen. Let's look at some
 examples:
 
-**"Connect this to the corner"**
+---------------
+
+# "Connect this to the corner"
 
 <sub>EXAMPLE 1</sub>
 ```html
@@ -24,7 +26,9 @@ make the layout more readable.
 In addition to `top` and `left`, you can also use `bottom`, `right`, `width`, `height`, `centerx`
 and `centery`.
 
-**"Can I have an alternative syntax, please"**
+---------------
+
+## "Can I have an alternative syntax, please"
 
 <sub>EXAMPLE 2</sub>
 ```html
@@ -37,7 +41,9 @@ Instead of separate attributes, you can collect all the connections in one `ui4`
 separating them with a semicolon. Spaces can be used to make the spec more readable, but have
 no effect on the final result.
 
-**"Connect A to B"**
+---------------
+
+### "Connect A to B"
 
 <sub>EXAMPLE 3</sub>
 ```html
@@ -51,7 +57,9 @@ Same `top`, `left`, `width` etc. work with peer elements in an intuitive way, al
 edges or size of the peer element instead of the parent. Gap is again left between the elements
 whenever they are "pushing" against each other.
 
-**"I want them closer"**
+---------------
+
+#### "I want them closer"
 
 <sub>EXAMPLE 4</sub>
 ```html
@@ -69,7 +77,9 @@ is used to make sure there is only 1 pixel between A and B, no matter what the g
 > - With a `gap` attribute that sets the default for all the child elements
 > - Setting a global value, e.g. to 4 px with `<script>globalGap(4)</script>`
 
-**"Just put it in the center"**
+---------------
+
+##### "Just put it in the center"
 
 <sub>EXAMPLE 5</sub>
 ```html
@@ -80,6 +90,8 @@ is used to make sure there is only 1 pixel between A and B, no matter what the g
 
 Instead of using the primitives (like `centerx` and `centery` in this case), `dock` provides
 convenient and easier to read options.
+
+---------------
 
 **"This is a top banner"**
 
@@ -99,6 +111,8 @@ All the options for docking to the parent are:
 - `topcenter`, `leftcenter`, `rightcenter`, `bottomcenter`
 - `center`, `all`
 
+---------------
+
 **"Put A above B"**
 
 <sub>EXAMPLE 7</sub>
@@ -110,6 +124,8 @@ All the options for docking to the parent are:
 
 These convenience docking options, `above`, `below`, `rightof` and `leftof`, place the element
 beside another one and set the shared dimension (width in the example above) to be the same.
+
+---------------
 
 **"A should be between these two guys"**
 
@@ -127,7 +143,9 @@ We also use the `size` shorthand instead of specifying `width` and `height` sepa
 available shorthands are `position` (instead of `left` and `top`) and `frame` (matching both size
 and position).
 
-**"No, I mean stretched all the way between them"**
+---------------
+
+**"...no, I mean stretched all the way between them"**
 
 <sub>EXAMPLE 9</sub>
 ```html
@@ -135,6 +153,8 @@ and position).
 ```
 <iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example0009.html"></iframe>
 <a style="color: #404040" href="examples/example0009.html">Open in full screen</a>
+
+---------------
 
 **"This is a third of the size of the whole thing"**
 
@@ -149,6 +169,8 @@ Because of the gaps, just dividing the width by 3 is not accurate, so we use a c
 for getting "gap-observing" shares of the whole.
 
 Of course, rather than managing sizes like this, you want to...
+
+---------------
 
 **"Just throw some boxes in there"**
 
