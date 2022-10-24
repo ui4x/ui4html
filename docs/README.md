@@ -3,18 +3,14 @@ Is CSS with its multiple layout engines too complicated for your needs?
 
 ui4 provides an alternative for placing UI elements on the screen. Let's look at some examples:
 
-#### "Connect this to the corner"
-
-<div>
+**"Connect this to the corner"**
 
 ```html
 <div id="square" top="top" left="left"></div>
 ```
 
-</div>
-
-<iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0002.html"></iframe><br/>
-<button onclick="location.href='examples/example0002.html'">Open in full screen</button>
+<iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0001.html"></iframe><br/>
+<button onclick="location.href='examples/example0001.html'">Open in full screen</button>
 
 Pretty close to CSS `top` or `left`, just with the little gaps added between the element and the
 edges of the parent.

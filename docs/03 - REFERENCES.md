@@ -1,6 +1,9 @@
 ---
 layout: page
+title: References
 ---
+
+# References
 
 Similar works and things to learn from them:
 
