@@ -51,6 +51,22 @@ animations as a part of the constraint directly, as in the following example:
       <tr>
         <td>
           <sub>EXAMPLE 13</sub>
+          <pre>&lt;div id="first" dock="center:1s" width="125" height="50">Hello!&lt;/div></pre>
+        </td>
+        <td>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0013.html"></iframe><br/>
+          <button onclick="location.href='examples/example0013.html'">Open in full screen</button>
+        </td>
+      </tr>
+    </table>
+
+ui4 Javascript interface can also be used to set animated constraints in event handlers:
+
+
+    <table class="example">
+      <tr>
+        <td>
+          <sub>EXAMPLE 14</sub>
           <pre>&lt;div id="first" dock="center" width="125" height="50">Hello!&lt;/div>
 &lt;button id="second" frame="first.frame" 
         onclick="ui4.set(this, 'top=first.bottom: 0.5s, ease-in-out')">
@@ -58,8 +74,8 @@ animations as a part of the constraint directly, as in the following example:
 &lt;/button></pre>
         </td>
         <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0013.html"></iframe><br/>
-          <button onclick="location.href='examples/example0013.html'">Open in full screen</button>
+          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0014.html"></iframe><br/>
+          <button onclick="location.href='examples/example0014.html'">Open in full screen</button>
         </td>
       </tr>
     </table>

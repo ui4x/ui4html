@@ -27,6 +27,12 @@ To stick to the principle of locality, and to avoid issues of CSS and ui4 confli
 animations as a part of the constraint directly, as in the following example:
 
 ```html example solid
+<div id="first" dock="center:1s" width="125" height="50">Hello!</div>
+```
+
+ui4 Javascript interface can also be used to set animated constraints in event handlers:
+
+```html example solid
 <div id="first" dock="center" width="125" height="50">Hello!</div>
 <button id="second" frame="first.frame" 
         onclick="ui4.set(this, 'top=first.bottom: 0.5s, ease-in-out')">

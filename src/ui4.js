@@ -284,8 +284,9 @@ class UI4 {
     if (typeof elementOrId === "string") {
       element = document.getElementById(elementOrId);
     }
+    const targetId = element.id;
     const newDependencies = this.parseAndOrderDependencies(element, dependency);
-    const existingDependencies = this.allDependencies[element.id] || [];
+    const existingDependencies = this.allDependencies[targetId] || [];
     existingDependencies.forEach((dependency) => {
       newDependencies.forEach((newDependency, index) => {
         if (
@@ -295,12 +296,15 @@ class UI4 {
           dependency.value = newDependency.value;
           dependency.animation = newDependency.animation;
           newDependencies.splice(index, 1);
+          this.setSourceDependencies(targetId, dependency);
         }
       });
     });
-    this.allDependencies[element.id] = existingDependencies.concat(newDependencies);
-    console.log(JSON.stringify(this.allDependencies));
-    this.checkDependenciesFor(element.id);
+    this.allDependencies[targetId] = existingDependencies.concat(newDependencies);
+    newDependencies.forEach((dependency) => this.setSourceDependencies(targetId, dependency));
+    console.log("ALL: " + JSON.stringify(this.allDependencies));
+    console.log("DEP: " + JSON.stringify(this.sourceDependencies));
+    this.checkDependenciesFor(targetId);
   }
 
   share(targetElem, targetAttribute, shareOf, total) {
@@ -406,13 +410,7 @@ class UI4 {
       } else {
         this.allDependencies[targetId] = dependencies;
         for (const dependency of dependencies) {
-          if (typeof dependency.value === "object" && "dependencyIDs" in dependency.value) {
-            dependency.value.dependencyIDs.forEach((sourceID) => {
-              const targetIds = this.sourceDependencies[sourceID] || {};
-              targetIds[targetId] = true;
-              this.sourceDependencies[sourceID] = targetIds;
-            });
-          }
+          this.setSourceDependencies(targetId, dependency);
         }
       }
     }
@@ -435,6 +433,16 @@ class UI4 {
         */
     // Check children, since mutation observer only seems to pick the root of changes
     node.childNodes.forEach((childNode) => this.setDependencies(childNode));
+  }
+
+  setSourceDependencies(targetId, dependency) {
+    if (typeof dependency.value === "object" && "dependencyIDs" in dependency.value) {
+      dependency.value.dependencyIDs.forEach((sourceID) => {
+        const targetIds = this.sourceDependencies[sourceID] || {};
+        targetIds[targetId] = true;
+        this.sourceDependencies[sourceID] = targetIds;
+      });
+    }
   }
 
   checkStyles(node) {
@@ -521,6 +529,7 @@ class UI4 {
 
       this.parseCoreSpec(node, targetAttribute, comparison, sourceSpec, dependencies, animationOptions);
     });
+    console.log(JSON.stringify(dependencies));
     return dependencies;
   }
 
@@ -926,6 +935,7 @@ class UI4 {
     let redrawNeeded = false;
 
     dependencies.forEach((dependency) => {
+      console.log("Checking " + JSON.stringify(dependency));
       if (dependency.animation && dependency.animation.running) {
         redrawNeeded = true;
         return;
@@ -962,16 +972,11 @@ class UI4 {
         }
       } else if (UI4.comparisons[dependency.comparison](target.value, sourceValue)) {
         setValue = result;
-      } else if (dependency.animation && !dependency.animation.running) {
-        console.log(JSON.stringify(dependency));
-        delete dependency.animation;
-        console.log(JSON.stringify(dependency));
-        setValue = result;
       }
 
       if (setValue !== undefined) {
         if (dependency.animation) {
-          this.startAnimation(dependency.targetAttribute, result, dependency);
+          setTimeout(this.startAnimation.bind(this), 10, dependency.targetAttribute, result, dependency);
         } else {
           values[dependency.targetAttribute] = setValue;
         }
@@ -1123,7 +1128,7 @@ class UI4 {
     // if ("iterations" in animationOptions && animationOptions.iterations === 0) {
     //   animationOptions.iterations = Infinity;
     // }
-    animationOptions.fill = "both";
+    // animationOptions.fill = "both";
     const animation = data.targetElem.animate(
       [
         this.setValue[targetAttr](data.context, data.targetValue),
@@ -1131,9 +1136,11 @@ class UI4 {
       ],
       animationOptions
     );
-    animationOptions.running = true;
+    dependency.animation.running = true;
+    const _this = this;
     animation.onfinish = function () {
-      dependency.animation.running = false;
+      delete dependency.animation;
+      _this.checkDependenciesFor(data.targetElem.id);
     };
   }
 
