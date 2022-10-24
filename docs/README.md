@@ -5,19 +5,16 @@ ui4 provides an alternative for placing UI elements on the screen. Let's look at
 
 #### "Connect this to the corner"
 
+<div>
 
-    <table class="example">
-      <tr>
-        <td>
-          <sub>EXAMPLE 2</sub>
-          <pre>&lt;div id="square" top="top" left="left">&lt;/div></pre>
-        </td>
-        <td>
-          <iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0002.html"></iframe><br/>
-          <button onclick="location.href='examples/example0002.html'">Open in full screen</button>
-        </td>
-      </tr>
-    </table>
+```html
+<div id="square" top="top" left="left"></div>
+```
+
+</div>
+
+<iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0002.html"></iframe><br/>
+<button onclick="location.href='examples/example0002.html'">Open in full screen</button>
 
 Pretty close to CSS `top` or `left`, just with the little gaps added between the element and the
 edges of the parent.

@@ -30,12 +30,22 @@ animations as a part of the constraint directly, as in the following example:
 <div id="first" dock="center:1s" width="125" height="50">Hello!</div>
 ```
 
-ui4 Javascript interface can also be used to set animated constraints in event handlers:
+ui4 JS interface can also be used to set animated constraints in event handlers:
 
 ```html example solid
-<div id="first" dock="center" width="125" height="50">Hello!</div>
+<div id="first" dock="center" width="125" height="50">Hello</div>
 <button id="second" frame="first.frame" 
-        onclick="ui4.set(this, 'top=first.bottom: 0.5s, ease-in-out')">
+        onclick="ui4.set(this, 'top=first.bottom:0.5s')">
+    Click me
+</button>
+```
+
+Animations can be chained with an arrow syntax:
+
+```html
+<div id="first" dock="center" width="125" height="50">Hello</div>
+<button id="second" frame="first.frame" 
+        onclick="ui4.set(this, 'top=first.bottom:0.5s >>> top=first.top:0.5s')">
     Click me
 </button>
 ```

@@ -60,7 +60,7 @@ animations as a part of the constraint directly, as in the following example:
       </tr>
     </table>
 
-ui4 Javascript interface can also be used to set animated constraints in event handlers:
+ui4 JS interface can also be used to set animated constraints in event handlers:
 
 
     <table class="example">
@@ -69,7 +69,7 @@ ui4 Javascript interface can also be used to set animated constraints in event h
           <sub>EXAMPLE 14</sub>
           <pre>&lt;div id="first" dock="center" width="125" height="50">Hello!&lt;/div>
 &lt;button id="second" frame="first.frame" 
-        onclick="ui4.set(this, 'top=first.bottom: 0.5s, ease-in-out')">
+        onclick="ui4.set(this, 'top=first.bottom: 1s, ease-in-out')">
     Click me
 &lt;/button></pre>
         </td>
