@@ -63,7 +63,7 @@ for file_path in sorted(source_path.glob("*.md")):
                     f"Example {example_number}".upper(),
                     example_lines,
                     running_example.format(f"examples/{example_file_name}"),
-                    f'<a href="examples/{example_file_name}">Open in full screen</a>'
+                    f'<a style="color: #404040" href="examples/{example_file_name}">Open in full screen</a>'
                 )
 
                 lines_out.extend(example_table.splitlines())

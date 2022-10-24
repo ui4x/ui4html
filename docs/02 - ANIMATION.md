@@ -14,7 +14,7 @@ In this example we use CSS to animate the first element width on hover.
 <div id="second" dock="first.below" bottom="bottom"></div>
 ```
 <iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example0012.html"></iframe>
-<a href="examples/example0012.html">Open in full screen</a>
+<a style="color: #404040" href="examples/example0012.html">Open in full screen</a>
 
 The example above works because we did not use ui4 to fix the dimension that was animated with CSS,
 so there was no conflict. The next example is otherwise identical, but ui4 width keeps the width
@@ -26,7 +26,7 @@ fixed, and hovering has no effect.
 <div id="second" dock="first.below" bottom="bottom"></div>
 ```
 <iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example0013.html"></iframe>
-<a href="examples/example0013.html">Open in full screen</a>
+<a style="color: #404040" href="examples/example0013.html">Open in full screen</a>
 
 To stick to the principle of locality, and to avoid issues of CSS and ui4 conflicting, we can apply
 animations as a part of the constraint directly, as in the following example:
@@ -36,7 +36,7 @@ animations as a part of the constraint directly, as in the following example:
 <div id="first" dock="center:1s" width="125" height="50">Hello!</div>
 ```
 <iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example0014.html"></iframe>
-<a href="examples/example0014.html">Open in full screen</a>
+<a style="color: #404040" href="examples/example0014.html">Open in full screen</a>
 
 ui4 JS interface can also be used to set animated constraints in event handlers:
 
@@ -49,7 +49,7 @@ ui4 JS interface can also be used to set animated constraints in event handlers:
 </button>
 ```
 <iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example0015.html"></iframe>
-<a href="examples/example0015.html">Open in full screen</a>
+<a style="color: #404040" href="examples/example0015.html">Open in full screen</a>
 
 Animations can be chained with an arrow syntax:
 
