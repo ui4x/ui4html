@@ -57,7 +57,7 @@ is used to make sure there is only 1 pixel between A and B, no matter what the g
 > - With a `gap` attribute that sets the default for all the child elements
 > - Setting a global value, e.g. to 4 px with `<script>globalGap(4)</script>`
 
-#### "Just put it in the center"
+**"Just put it in the center"**
 
 ```html example solid_sized
 <div id="centered" dock="center"></div>
@@ -66,7 +66,7 @@ is used to make sure there is only 1 pixel between A and B, no matter what the g
 Instead of using the primitives (like `centerx` and `centery` in this case), `dock` provides
 convenient and easier to read options.
 
-#### "This is a top banner"
+**"This is a top banner"**
 
 ```html example solid
 <div id="topBanner" dock="top" height="30"></div>
@@ -81,7 +81,7 @@ All the options for docking to the parent are:
 - `topcenter`, `leftcenter`, `rightcenter`, `bottomcenter`
 - `center`, `all`
 
-#### "Put A above B"
+**"Put A above B"**
 
 ```html example solid 1
 <div id="a" dock="b.above" height="30">A</div>
@@ -91,7 +91,7 @@ All the options for docking to the parent are:
 These convenience docking options, `above`, `below`, `rightof` and `leftof`, place the element
 beside another one and set the shared dimension (width in the example above) to be the same.
 
-#### "A should be between these two guys"
+**"A should be between these two guys"**
 
 ```html example solid 3
 <div id="b" dock="left" width="40">B</div>
@@ -106,7 +106,7 @@ We also use the `size` shorthand instead of specifying `width` and `height` sepa
 available shorthands are `position` (instead of `left` and `top`) and `frame` (matching both size
 and position).
 
-#### "No, I mean stretched all the way between them"
+**"No, I mean stretched all the way between them"**
 
 ```html example solid 3
 <div id="b" dock="left" width="40">B</div>
@@ -114,7 +114,7 @@ and position).
 <div id="a" dock="between(b.right, c.left)">A</div>
 ```
 
-#### "This is a third of the size of the whole thing"
+**"This is a third of the size of the whole thing"**
 
 ```html example solid 1
 <div id="one_third" dock="left" width="share(1, 3)"></div>
@@ -127,7 +127,7 @@ for getting "gap-observing" shares of the whole.
 
 Of course, rather than managing sizes like this, you want to...
 
-#### "Just throw some boxes in there"
+**"Just throw some boxes in there"**
 
 ```html example solid_resizable
 <div id="resizable" layout="grid">

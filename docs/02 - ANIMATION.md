@@ -13,8 +13,7 @@ In this example we use CSS to animate the first element width on hover.
 <div id="first" dock="center">Hover over me</div>
 <div id="second" dock="first.below" bottom="bottom"></div>
 ```
-
-<iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0012.html"></iframe></br>
+<iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example0012.html"></iframe>
 <a href="examples/example0012.html">Open in full screen</a>
 
 The example above works because we did not use ui4 to fix the dimension that was animated with CSS,
@@ -26,8 +25,7 @@ fixed, and hovering has no effect.
 <div id="first" dock="center" width="125">No hover for me</div>
 <div id="second" dock="first.below" bottom="bottom"></div>
 ```
-
-<iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0013.html"></iframe></br>
+<iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example0013.html"></iframe>
 <a href="examples/example0013.html">Open in full screen</a>
 
 To stick to the principle of locality, and to avoid issues of CSS and ui4 conflicting, we can apply
@@ -37,8 +35,7 @@ animations as a part of the constraint directly, as in the following example:
 ```html
 <div id="first" dock="center:1s" width="125" height="50">Hello!</div>
 ```
-
-<iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0014.html"></iframe></br>
+<iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example0014.html"></iframe>
 <a href="examples/example0014.html">Open in full screen</a>
 
 ui4 JS interface can also be used to set animated constraints in event handlers:
@@ -51,8 +48,7 @@ ui4 JS interface can also be used to set animated constraints in event handlers:
     Click me
 </button>
 ```
-
-<iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="examples/example0015.html"></iframe></br>
+<iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example0015.html"></iframe>
 <a href="examples/example0015.html">Open in full screen</a>
 
 Animations can be chained with an arrow syntax:

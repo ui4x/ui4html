@@ -16,17 +16,15 @@ for file_path in sorted(source_path.glob("*.md")):
         r"```html example(\s+(?P<template>[\w_]+))?(\s+(?P<start_line>\d+)(-(?P<end_line>\d+))?)?"
     )
 
-    # Empty line before code example is necessary to make syntax highlighting work
     example_snippet = """<sub>{}</sub>
 ```html
 {}
 ```
-
-{}</br>
+{}
 {}"""
 
     running_example = (
-        '<iframe style="border-style:none;box-shadow:0px 0px 2px 2px rgba(0,0,0,0.2);" src="{}"></iframe>'
+        '<iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="{}"></iframe>'
     )
 
     try:
