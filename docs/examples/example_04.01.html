@@ -1,0 +1,51 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>ui4 Example 04.01</title>
+    <script src="ui4.js"></script>
+    <style>
+        div#root > * {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        button {
+            border: 1px solid cornflowerblue;
+        }
+        button:hover {
+            background-color: #759fea;
+        }
+        button:active {
+            background-color: #1261e8;
+        }
+        triangeLeft {
+            width: 0;
+            height: 0;
+            border-style: solid;
+            border-width: 50px 50px 50px 0;
+            border-color: transparent #000000 transparent transparent;
+        }
+    </style>
+</head>
+<body>
+<div id="root" class="ui4Root">
+<div style="background-color: #6495ED55" centery="centery" left="centerx-100" right="right" height="50"></div>
+<div id="sample" style="background-color: cornflowerblue"
+centerx="centerx" left="centerx-100" right="right"
+centery="centery" height="50">
+</div>
+<div centerx="sample.left" bottom="sample.top-gap">left</div>
+<div centerx="sample.left" top="sample.top-gap" bottom="sample.bottom+gap" width="2" style="background-color: black"></div>
+<div centerx="sample.centerx" bottom="sample.top-gap">centerx</div>
+<div centerx="sample.centerx" top="sample.top-gap" bottom="sample.bottom+gap" width="2" style="background-color: black"></div>
+<div style="color: grey" id="discarded" right="right" bottom="sample.top-gap">right</div>
+<div center="discarded.center" style="font-size: 20px; color: red">X</div> 
+<div right="right" top="sample.top-gap" bottom="sample.bottom+gap" width="2" style="background-color: grey"></div>
+<div id="arrow" style="background-color: grey" centery="sample.centery" right="right" left="sample.right" height="2"></div>
+<div style="color: grey" centery="arrow.centery" centerx="arrow.left">◀︎</div>
+</div>
+</body>
+</html>
