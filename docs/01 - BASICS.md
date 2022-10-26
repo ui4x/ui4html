@@ -23,7 +23,7 @@ a standard gap of 8px is left between an element and whatever it is connected to
 Note that there is no need to identify the parent by id, but `left="parent_id.left"` works, and can
 make the layout more readable.
 
-In addition to `top` and `left`, you can also use `bottom`, `right`, `width`, `height`, `centerx`
+In addition to `top` and `left`, we have `bottom`, `right`, `width`, `height`, `centerx`
 and `centery`.
 
 ---------------
@@ -89,7 +89,7 @@ is used to make sure there is only 1 pixel between A and B, no matter what the g
 <a style="color: #404040" href="examples/example_01.05.html">Open in full screen</a>
 
 Instead of using the primitives (like `centerx` and `centery` in this case), `dock` provides
-convenient and easier to read options.
+convenient and easier-to-read options.
 
 ---------------
 

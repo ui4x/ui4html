@@ -25,7 +25,7 @@ is to the left of it.
 
 ```html example transparent 3
 <div id="behind" style="background-color: #6495ED55" centery="centery" left="centerx-100" right="right" height="50"></div>
-<div style="background: #6495ED" center="center" left="centerx-100" right="right" height="50"></div>
+<div style="background: #6495ED" dock="center" left="centerx-100" right="right" height="50"></div>
 <div centerx="behind.left" bottom="behind.top-gap">left</div>
 <div centerx="behind.left" top="behind.top-gap" bottom="behind.bottom+gap" width="2" style="background-color: black"></div>
 <div centerx="centerx" bottom="behind.top-gap">centerx</div>
