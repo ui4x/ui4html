@@ -1,6 +1,6 @@
 ---
 layout: page
-title: References
+title: Related
 ---
 
 _Similar works and things to learn from them:_

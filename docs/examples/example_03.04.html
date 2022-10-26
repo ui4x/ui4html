@@ -1,0 +1,45 @@
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+    <title>ui4 Example 03.04</title>
+    <script src="ui4.js"></script>
+    <style>
+        div#root > * {
+            background-color: cornflowerblue;
+            color: white;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+            font-size: 14px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        button {
+            border: 1px solid cornflowerblue;
+        }
+        button:hover {
+            background-color: #759fea;
+        }
+        button:active {
+            background-color: #1261e8;
+        }
+        div#b {
+            color: black;
+            background-color: #eeeeee;
+        }
+        div#c {
+            color: black;
+            background-color: #eeeeee;
+        }
+    </style>
+</head>
+<body>
+<div id="root" class="ui4Root">
+<div id="first" dock="center" width="125" height="50">Hello</div>
+<button id="second" frame="first.frame" 
+        onclick="ui4.set(this, 'top=first.bottom:0.5s')">
+    Click me
+</button>
+</div>
+</body>
+</html>

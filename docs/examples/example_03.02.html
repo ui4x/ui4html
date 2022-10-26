@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <title>ui4 Example 7</title>
+    <title>ui4 Example 03.02</title>
     <script src="ui4.js"></script>
     <style>
         div#root > * {
@@ -14,29 +14,14 @@
             justify-content: center;
             align-items: center;
         }
-        button {
-            border: 1px solid cornflowerblue;
-        }
-        button:hover {
-            background-color: #759fea;
-        }
-        button:active {
-            background-color: #1261e8;
-        }
-        div#b {
-            color: black;
-            background-color: #eeeeee;
-        }
-        div#c {
-            color: black;
-            background-color: #eeeeee;
-        }
+        div#first {transition: height 1s, width 1s; width: 125px; height: 50px;}
+        div#first:hover {width: 175px;}
     </style>
 </head>
 <body>
 <div id="root" class="ui4Root">
-<div id="a" dock="b.above" height="30">A</div>
-<div id="b" dock="center" width="50" height="30">B</div>
+<div id="first" dock="center" width="125">No hover for me</div>
+<div id="second" dock="first.below" bottom="bottom"></div>
 </div>
 </body>
 </html>

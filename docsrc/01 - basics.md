@@ -8,7 +8,7 @@ examples:
 
 ---------------
 
-# "Connect this to the corner"
+### "Connect this to the corner"
 
 ```html example solid_sized
 <div id="square" top="top" left="left"></div>
@@ -25,7 +25,7 @@ and `centery`.
 
 ---------------
 
-## "Can I have an alternative syntax, please"
+### "Can I have an alternative syntax, please"
 
 ```html example solid_sized
 <div id="square" ui4="top=top; left=left"></div>
@@ -50,7 +50,7 @@ whenever they are "pushing" against each other.
 
 ---------------
 
-#### "I want them closer"
+### "I want them closer, and I am not afraid of some math"
 
 ```html example solid_sized
 <div id="a" top="b.bottom-(gap-1)" left="b.left">A</div>
@@ -67,7 +67,7 @@ is used to make sure there is only 1 pixel between A and B, no matter what the g
 
 ---------------
 
-##### "Just put it in the center"
+### "Just put it in the center"
 
 ```html example solid_sized
 <div id="centered" dock="center"></div>
@@ -78,7 +78,7 @@ convenient and easier to read options.
 
 ---------------
 
-**"This is a top banner"**
+### "This is a top banner"
 
 ```html example solid
 <div id="topBanner" dock="top" height="30"></div>
@@ -95,7 +95,7 @@ All the options for docking to the parent are:
 
 ---------------
 
-**"Put A above B"**
+### "Put A above B"
 
 ```html example solid 1
 <div id="a" dock="b.above" height="30">A</div>
@@ -107,7 +107,7 @@ beside another one and set the shared dimension (width in the example above) to 
 
 ---------------
 
-**"A should be between these two guys"**
+### "A should be between these two guys"
 
 ```html example solid 3
 <div id="b" dock="left" width="40">B</div>
@@ -124,7 +124,7 @@ and position).
 
 ---------------
 
-**"...no, I mean stretched all the way between them"**
+### "...no, I mean stretched all the way between them"
 
 ```html example solid 3
 <div id="b" dock="left" width="40">B</div>
@@ -134,7 +134,7 @@ and position).
 
 ---------------
 
-**"This is a third of the size of the whole thing"**
+### "This is a third of the size of the whole thing"
 
 ```html example solid 1
 <div id="one_third" dock="left" width="share(1, 3)"></div>
@@ -149,7 +149,7 @@ Of course, rather than managing sizes like this, you want to...
 
 ---------------
 
-**"Just throw some boxes in there"**
+### "Just throw some boxes in there"
 
 ```html example solid_resizable
 <div id="resizable" layout="grid">
@@ -162,3 +162,11 @@ Of course, rather than managing sizes like this, you want to...
 Grid layout takes whatever you give it and layouts them so that they are as square as possible but
 still fill the available space. Try resizing the example to see how it behaves (handle in the
 bottom right corner).
+
+----------------
+
+### "Let them run free"
+
+```html example solid
+<div dock="center" left="left" width="50" height="50"></div>
+```

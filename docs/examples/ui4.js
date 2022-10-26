@@ -223,7 +223,7 @@ class UI4 {
             width: 2 * (value - parseFloat(context.getStyle.left)) + "px",
           };
         } else if (context.dependencies.find((item) => item.targetAttribute === "right")) {
-          // width must give
+          // right locked, width must give
           return {
             width: 2 * (context.parentElem.clientWidth - parseFloat(context.getStyle.right) - value) + "px",
           };
@@ -239,7 +239,7 @@ class UI4 {
             height: 2 * (value - parseFloat(context.getStyle.top)) + "px",
           };
         } else if (context.dependencies.find((item) => item.targetAttribute === "bottom")) {
-          // height must give
+          // bottom locked, height must give
           return {
             height: 2 * context.parentElem.clientHeight - parseFloat(context.getStyle.bottom) - value + "px",
           };
@@ -249,6 +249,8 @@ class UI4 {
         }
       },
     };
+    this.horizontalPriority = ["width", "centerx", "left", "right"];
+    this.verticalPriority = ["height", "centery", "top", "bottom"];
 
     const attributeOptions = Object.keys(this.getValue).join("|");
     this.idAndAttribute = new RegExp(`(?<id>([a-zA-Z]|\\d|_|-)+)\\.(?<attribute>(${attributeOptions}))`);
@@ -285,7 +287,7 @@ class UI4 {
       element = document.getElementById(elementOrId);
     }
     const targetId = element.id;
-    const newDependencies = this.parseAndOrderDependencies(element, dependency);
+    const newDependencies = this.parseAndCleanDependencies(element, dependency);
     const existingDependencies = this.allDependencies[targetId] || [];
     existingDependencies.forEach((dependency) => {
       newDependencies.forEach((newDependency, index) => {
@@ -393,7 +395,7 @@ class UI4 {
     if (ui4Attr) {
       let dependencies;
       try {
-        dependencies = this.parseAndOrderDependencies(node, ui4Attr);
+        dependencies = this.parseAndCleanDependencies(node, ui4Attr);
       } catch (error) {
         console.error(error);
         return;
@@ -477,9 +479,22 @@ class UI4 {
     return constraintArray.join(";");
   }
 
-  parseAndOrderDependencies(node, specString) {
-    const dependencies = this.parse(node, specString.replace(/\s/g, ""));
+  parseAndCleanDependencies(node, specString) {
+    let dependencies = this.parse(node, specString.replace(/\s/g, ""));
 
+    const targetAttributeSet = new Set(dependencies.map((dependency) => dependency.targetAttribute));
+
+    // Only 2 vertical and 2 horizontal attributes can be sanely constrained
+    [this.horizontalPriority, this.verticalPriority].forEach((dimension) => {
+      const overlapping = dimension.filter((attribute) => targetAttributeSet.has(attribute));
+      if (overlapping.length > 2) {
+        overlapping.slice(2).forEach((attribute) => {
+          dependencies = dependencies.filter((dependency) => dependency.targetAttribute !== attribute);
+        });
+      }
+    });
+
+    // All connections ("=") must come before limits ("><")
     dependencies.sort((a, b) => UI4.ordering[a.comparison] - UI4.ordering[b.comparison]);
     return dependencies;
   }
@@ -537,12 +552,21 @@ class UI4 {
     if (targetAttribute in this.setValue) {
       const sourceTree = new UI4.Parser().parse(sourceSpec);
       sourceTree.dependencyIDs = this.finalizeIdAndAttributeTree(node, targetAttribute, sourceTree);
-      dependencies.push({
-        targetAttribute: targetAttribute,
-        comparison: comparison,
-        value: sourceTree,
-        animation: animationOptions,
-      });
+      if (sourceTree.type === UI4.KEYWORD && sourceTree.value === "free") {
+        const allDependencies = this.allDependencies[node.id] || [];
+        allDependencies[node.id].forEach((dependency, index) => {
+          if (dependency.targetAttribute === targetAttribute) {
+            allDependencies.splice(index, 1);
+          }
+        });
+      } else {
+        dependencies.push({
+          targetAttribute: targetAttribute,
+          comparison: comparison,
+          value: sourceTree,
+          animation: animationOptions,
+        });
+      }
     } else if (targetAttribute in UI4.composites) {
       const targetCombo = UI4.composites[targetAttribute];
       let sourceAttribute, sourceCombo;

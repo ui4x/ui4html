@@ -2,7 +2,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
-    <title>ui4 Example 2</title>
+    <title>ui4 Example 01.07</title>
     <script src="ui4.js"></script>
     <style>
         div#root > * {
@@ -13,7 +13,15 @@
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 50px; height: 50px;
+        }
+        button {
+            border: 1px solid cornflowerblue;
+        }
+        button:hover {
+            background-color: #759fea;
+        }
+        button:active {
+            background-color: #1261e8;
         }
         div#b {
             color: black;
@@ -27,7 +35,8 @@
 </head>
 <body>
 <div id="root" class="ui4Root">
-<div id="square" ui4="top=top; left=left"></div>
+<div id="a" dock="b.above" height="30">A</div>
+<div id="b" dock="center" width="50" height="30">B</div>
 </div>
 </body>
 </html>

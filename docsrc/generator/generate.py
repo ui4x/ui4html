@@ -2,12 +2,14 @@ import re
 import shutil
 from pathlib import Path
 
-source_path = Path(__file__).parent
-target_path = Path(__file__).parent.parent / "docs"
-
-example_number = 0
+source_path = Path(__file__).parent.parent
+root = source_path.parent
+target_path = root / "docs"
+examples_path = target_path / "examples"
 
 for file_path in sorted(source_path.glob("*.md")):
+    file_number = file_path.stem[:2]
+    example_number = 0
 
     lines_in = iter(file_path.read_text().splitlines())
     lines_out = []
@@ -35,6 +37,7 @@ for file_path in sorted(source_path.glob("*.md")):
                 lines_out.append(line)
             else:
                 example_number += 1
+                example_id = f"{file_number}.{example_number:02}"
                 meta = match.groupdict()
                 example_content = []
                 while line := next(lines_in):
@@ -43,7 +46,7 @@ for file_path in sorted(source_path.glob("*.md")):
                     else:
                         example_content.append(line)
                 template = Path(f"templates/{meta['template'] or 'solid'}.html").read_text()
-                example = template.replace("[title]", f"ui4 Example {example_number}")
+                example = template.replace("[title]", f"ui4 Example {example_id}")
                 example = example.replace("[content]", "\n".join(example_content))
                 start_line = (start_as_str := meta.get("start_line")) and int(start_as_str) or None
                 end_line = (end_as_str := meta.get("end_line")) and int(end_as_str) or None
@@ -51,8 +54,8 @@ for file_path in sorted(source_path.glob("*.md")):
                 start_line = start_line and start_line - 1 or None
 
                 # Save example file
-                example_file_name = f"example{example_number:04}.html"
-                (target_path / "examples" / example_file_name).write_text(example)
+                example_file_name = f"example_{example_id}.html"
+                (examples_path / example_file_name).write_text(example)
 
                 # Lines to show on site
                 example_lines = "\n".join(example_content[slice(start_line, end_line)])
@@ -60,7 +63,7 @@ for file_path in sorted(source_path.glob("*.md")):
 
                 # Add example table
                 example_table = example_snippet.format(
-                    f"Example {example_number}".upper(),
+                    f"Example {example_id}".upper(),
                     example_lines,
                     running_example.format(f"examples/{example_file_name}"),
                     f'<a style="color: #404040" href="examples/{example_file_name}">Open in full screen</a>'
@@ -76,7 +79,7 @@ for file_path in sorted(source_path.glob("*.md")):
     target_file_name = f"{file_path.stem.upper()}.md"
     (target_path / target_file_name).write_text(result)
 
-    print(f"Examples total generating {target_file_name} {str(file_path)}: {example_number}")
+    print(f"Examples in {target_file_name} {str(file_path)}: {example_number}")
 
 
-shutil.copy(str(Path(__file__).parent.parent / "src" / "ui4.js"), target_path / "examples" / "ui4.js")
+shutil.copy(str(root / "src" / "ui4.js"), examples_path / "ui4.js")
