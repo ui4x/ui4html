@@ -6,7 +6,7 @@ title: Usability
 On this page: Notes and examples on how ui4 tries to make resulting UI match the expectations of
 the developer connecting the elements. In other words, how we try to avoid surprises.
 
-### Conflicting connections - Initial setup
+### Conflicting connections - Initial
 
 It is easy to accidentally define an impossible layout. For example, defining `width` in addition to
 `left` and `right` is redundant or, more likely, conflicting.
@@ -25,13 +25,16 @@ is to the left of it.
 
 <sub>EXAMPLE 04.01</sub>
 ```html
-<div id="sample" style="background-color: cornflowerblue"
+<div centerx="behind.left" bottom="behind.top-gap">left</div>
 ```
 <iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example_04.01.html"></iframe>
 <a style="color: #404040" href="examples/example_04.01.html">Open in full screen</a>
 
 ### Conflicting connections - Adding a connection
 
+When you add a new connection with `ui4.set`, the logic of handling conflicting combinations is
+changes: the just-added connection "always wins"; the other survivor is then selected in
+the same priority order as shown above.
 
 ### Invisible elements
 
@@ -39,3 +42,18 @@ When laying out the UI, divs are useful tools to create structure or as placehol
 elements that are added later. Challenge with empty divs is that they do not have a size, and it is
 easy to end up with an empty screen in the early stages of building the UI. To avoid this, ui4
 ensures that every element has a width and a height.
+
+<sub>EXAMPLE 04.02</sub>
+```html
+<div center="center" height="50"></div>
+```
+<iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example_04.02.html"></iframe>
+<a style="color: #404040" href="examples/example_04.02.html">Open in full screen</a>
+
+`div`s have no intrinsic size, and there is no content in the `div`, so by default it would have
+0 width and be invisible. ui4 checks for these and sets any missing dimension to 100 px. You
+_can_ still have 0-sized elements, but you have to set them explicitly to zero.
+
+### Debug mode
+
+Debug mode can be turned on by adding `<script>ui4.debug()</script>` somewhere after importing ui4.

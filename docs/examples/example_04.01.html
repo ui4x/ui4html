@@ -32,19 +32,16 @@
 </head>
 <body>
 <div id="root" class="ui4Root">
-<div style="background-color: #6495ED55" centery="centery" left="centerx-100" right="right" height="50"></div>
-<div id="sample" style="background-color: cornflowerblue"
-centerx="centerx" left="centerx-100" right="right"
-centery="centery" height="50">
-</div>
-<div centerx="sample.left" bottom="sample.top-gap">left</div>
-<div centerx="sample.left" top="sample.top-gap" bottom="sample.bottom+gap" width="2" style="background-color: black"></div>
-<div centerx="sample.centerx" bottom="sample.top-gap">centerx</div>
-<div centerx="sample.centerx" top="sample.top-gap" bottom="sample.bottom+gap" width="2" style="background-color: black"></div>
-<div style="color: grey" id="discarded" right="right" bottom="sample.top-gap">right</div>
+<div id="behind" style="background-color: #6495ED55" centery="centery" left="centerx-100" right="right" height="50"></div>
+<div style="background: #6495ED" center="center" left="centerx-100" right="right" height="50"></div>
+<div centerx="behind.left" bottom="behind.top-gap">left</div>
+<div centerx="behind.left" top="behind.top-gap" bottom="behind.bottom+gap" width="2" style="background-color: black"></div>
+<div centerx="centerx" bottom="behind.top-gap">centerx</div>
+<div centerx="centerx" top="behind.top-gap" bottom="behind.bottom+gap" width="2" style="background-color: black"></div>
+<div style="color: grey" id="discarded" right="right" bottom="behind.top-gap">right</div>
 <div center="discarded.center" style="font-size: 20px; color: red">X</div> 
-<div right="right" top="sample.top-gap" bottom="sample.bottom+gap" width="2" style="background-color: grey"></div>
-<div id="arrow" style="background-color: grey" centery="sample.centery" right="right" left="sample.right" height="2"></div>
+<div right="right" top="behind.top-gap" bottom="behind.bottom+gap" width="2" style="background-color: grey"></div>
+<div id="arrow" style="background-color: grey" centery="behind.centery" right="right" left="centerx+100+gap" height="2"></div>
 <div style="color: grey" centery="arrow.centery" centerx="arrow.left">◀︎</div>
 </div>
 </body>

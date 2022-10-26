@@ -572,7 +572,7 @@ class UI4 {
       let sourceAttribute, sourceCombo;
       for (const [attribute, combo] of Object.entries(UI4.composites)) {
         if (combo.length === targetCombo.length) {
-          if (sourceSpec.includes(`.${attribute}`)) {
+          if (sourceSpec.includes(`${attribute}`)) {
             sourceAttribute = attribute;
             sourceCombo = combo;
             break;
@@ -581,7 +581,7 @@ class UI4 {
       }
       if (sourceAttribute) {
         targetCombo.forEach((expandedAttribute, index) => {
-          const modifiedSourceSpec = sourceSpec.replace(`.${sourceAttribute}`, `.${sourceCombo[index]}`);
+          const modifiedSourceSpec = sourceSpec.replace(`${sourceAttribute}`, `${sourceCombo[index]}`);
           this.parseCoreSpec(node, expandedAttribute, comparison, modifiedSourceSpec, dependencies, animationOptions);
         });
       }
@@ -746,7 +746,7 @@ class UI4 {
 
   finalizeIdAndAttributeTree(node, targetAttribute, sourceTree) {
     const _this = this;
-    const _node = node;
+    // const _node = node;
     const walker = function (treeNode) {
       switch (treeNode.type) {
         case UI4.ID_AND_ATTRIBUTE:
