@@ -4,9 +4,11 @@ title: Usability
 ---
 
 On this page: Notes and examples on how ui4 tries to make resulting UI match the expectations of
-the developer connecting the elements. In other words, how we try to avoid surprises.
+the developer connecting the elements. In other words, avoiding surprises.
 
-### Conflicting connections - Initial
+---------------
+
+### Dealing with conflicting connections
 
 It is easy to accidentally define an impossible layout. For example, defining `width` in addition to
 `left` and `right` is redundant or, more likely, conflicting.
@@ -23,11 +25,10 @@ As an example, if you define `centerx`, `left` and `right`, ui4 will drop the `r
 because logically `right` cannot be anywhere else but as far to the right from `centerx` as `left`
 is to the left of it.
 
-```html example transparent 3
+```html example button_solid 11
 <div id="behind" style="background-color: #6495ED55" centery="centery" left="centerx-100" right="right" height="50"></div>
-<div style="background: #6495ED" dock="center" left="centerx-100" right="right" height="50"></div>
-<div centerx="behind.left" bottom="behind.top-gap">left</div>
-<div centerx="behind.left" top="behind.top-gap" bottom="behind.bottom+gap" width="2" style="background-color: black"></div>
+<div right="behind.left" centery="centery">left</div>
+<div centerx="behind.left-1" top="behind.top" bottom="behind.bottom" width="2" style="background-color: black"></div>
 <div centerx="centerx" bottom="behind.top-gap">centerx</div>
 <div centerx="centerx" top="behind.top-gap" bottom="behind.bottom+gap" width="2" style="background-color: black"></div>
 <div style="color: grey" id="discarded" right="right" bottom="behind.top-gap">right</div>
@@ -35,15 +36,34 @@ is to the left of it.
 <div right="right" top="behind.top-gap" bottom="behind.bottom+gap" width="2" style="background-color: grey"></div>
 <div id="arrow" style="background-color: grey" centery="behind.centery" right="right" left="centerx+100+gap" height="2"></div>
 <div style="color: grey" centery="arrow.centery" centerx="arrow.left">◀︎</div>
+<button dock="center" left="centerx-100" right="right" height="50"></button>
 ```
 
-### Conflicting connections - Adding a connection
+---------------
 
-When you add a new connection with `ui4.set`, the logic of handling conflicting combinations is
+### Adding a connection
+
+When you add a new connection with `ui4.set`, the logic of handling conflicting combinations
 changes: the just-added connection "always wins"; the other survivor is then selected in
 the same priority order as shown above.
 
-### Invisible elements
+```html example button_solid 5-8
+<div right="centerx-100-gap" centery="centery">left</div>
+<div centerx="centerx-100-1" top="centery-25" bottom="centery+25" width="2" style="background-color: black"></div>
+<div centerx="centerx" bottom="centery-25-gap">centerx</div>
+<div centerx="centerx" top="centery-25-gap" bottom="centery+25+gap" width="2" style="background-color: black"></div>
+<button centerx="centerx" left="centerx-100" height="50" centery="centery"
+        onclick="ui4.set(this, 'right=right')">
+    Click to expand
+</button>
+```
+
+Here, when we add a fix for `right` on button click, it wins over left even if ordinarily it would
+have lower priority, and `left` is removed.
+
+---------------
+
+### Making sure elements have a size
 
 When laying out the UI, divs are useful tools to create structure or as placeholders for other
 elements that are added later. Challenge with empty divs is that they do not have a size, and it is
@@ -57,6 +77,8 @@ ensures that every element has a width and a height.
 `div`s have no intrinsic size, and there is no content in the `div`, so by default it would have
 0 width and be invisible. ui4 checks for these and sets any missing dimension to 100 px. You
 _can_ still have 0-sized elements, but you have to set them explicitly to zero.
+
+---------------
 
 ### Debug mode
 

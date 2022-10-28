@@ -287,7 +287,11 @@ class UI4 {
       element = document.getElementById(elementOrId);
     }
     const targetId = element.id;
+
+    const lockedCSSPropertiesBeforeChange = this.activeCSSProperties(targetId, element);
+
     const newDependencies = this.parseAndCleanDependencies(element, dependency);
+    const newAttributes = new Set(newDependencies.map((dependency) => dependency.targetAttribute));
     const existingDependencies = this.allDependencies[targetId] || [];
     existingDependencies.forEach((dependency) => {
       newDependencies.forEach((newDependency, index) => {
@@ -302,11 +306,35 @@ class UI4 {
         }
       });
     });
-    this.allDependencies[targetId] = existingDependencies.concat(newDependencies);
-    newDependencies.forEach((dependency) => this.setSourceDependencies(targetId, dependency));
-    console.log("ALL: " + JSON.stringify(this.allDependencies));
-    console.log("DEP: " + JSON.stringify(this.sourceDependencies));
+    let combinedDependencies = existingDependencies.concat(newDependencies);
+    combinedDependencies = this.removeConflicts(combinedDependencies, newAttributes);
+    this.allDependencies[targetId] = combinedDependencies;
+    combinedDependencies.forEach((dependency) => this.setSourceDependencies(targetId, dependency));
+
+    const lockedCSSPropertiesAfterChange = this.activeCSSProperties(targetId, element);
+    lockedCSSPropertiesBeforeChange.forEach((property) => {
+      if (!lockedCSSPropertiesAfterChange.has(property)) {
+        element.style.removeProperty(property);
+      }
+    });
+
     this.checkDependenciesFor(targetId);
+    this.checkDependenciesFor(targetId);
+  }
+
+  activeCSSProperties(targetId, targetElement) {
+    const cssProperties = new Set();
+    const dependencies = this.allDependencies[targetId];
+    const context = {
+      targetElem: targetElement,
+      dependencies: dependencies,
+      parentElem: targetElement.parentElement,
+      getStyle: window.getComputedStyle(targetElement),
+    };
+    dependencies.forEach((dependency) => {
+      cssProperties.add(Object.keys(this.setValue[dependency.targetAttribute](context, 0))[0]);
+    });
+    return cssProperties;
   }
 
   share(targetElem, targetAttribute, shareOf, total) {
@@ -482,20 +510,33 @@ class UI4 {
   parseAndCleanDependencies(node, specString) {
     let dependencies = this.parse(node, specString.replace(/\s/g, ""));
 
+    dependencies = this.removeConflicts(dependencies);
+
+    // All connections ("=") must come before limits ("><")
+    dependencies.sort((a, b) => UI4.ordering[a.comparison] - UI4.ordering[b.comparison]);
+    return dependencies;
+  }
+
+  removeConflicts(dependencies, mustHave) {
+    // Only 2 vertical and 2 horizontal attributes can be sanely constrained
+
     const targetAttributeSet = new Set(dependencies.map((dependency) => dependency.targetAttribute));
 
-    // Only 2 vertical and 2 horizontal attributes can be sanely constrained
     [this.horizontalPriority, this.verticalPriority].forEach((dimension) => {
+      // Move any "must have" attributes to the start
+      if (mustHave) {
+        let start = dimension.filter((attribute) => mustHave.has(attribute));
+        dimension = start.concat(dimension.filter((attribute) => !mustHave.has(attribute)));
+      }
       const overlapping = dimension.filter((attribute) => targetAttributeSet.has(attribute));
       if (overlapping.length > 2) {
-        overlapping.slice(2).forEach((attribute) => {
+        const attributesToFree = overlapping.slice(2);
+        attributesToFree.forEach((attribute) => {
           dependencies = dependencies.filter((dependency) => dependency.targetAttribute !== attribute);
         });
       }
     });
 
-    // All connections ("=") must come before limits ("><")
-    dependencies.sort((a, b) => UI4.ordering[a.comparison] - UI4.ordering[b.comparison]);
     return dependencies;
   }
 
@@ -544,7 +585,6 @@ class UI4 {
 
       this.parseCoreSpec(node, targetAttribute, comparison, sourceSpec, dependencies, animationOptions);
     });
-    console.log(JSON.stringify(dependencies));
     return dependencies;
   }
 
@@ -899,6 +939,7 @@ class UI4 {
   checkDependenciesFor(targetId) {
     let redrawNeeded = false;
     if (targetId in this.allDependencies) {
+      const targetElem = document.getElementById(targetId);
       let checkResults = this.checkResults(targetId);
 
       let finalValues = checkResults[0];
@@ -910,9 +951,10 @@ class UI4 {
       for (const [targetAttribute, data] of Object.entries(finalValues)) {
         const updates = this.setValue[targetAttribute](data.context, data.sourceValue);
         for (const [key, value] of Object.entries(updates)) {
-          const oldValue = data.context.style[key];
+          console.log(targetId + "." + targetAttribute + ": " + key + "=" + value);
+          const oldValue = targetElem.style[key];
           if (!oldValue) {
-            data.context.style[key] = value;
+            targetElem.style[key] = value;
             continue;
           }
 
@@ -927,10 +969,10 @@ class UI4 {
             const oddValue = new Set([values[1], values[3], values[5]]);
             const evenValue = new Set([values[1], values[3], values[5]]);
             if (!(oddValue.size === 1 && evenValue.size === 1 && oddValue.values()[0] === evenValue.values()[0])) {
-              data.context.style[key] = value;
+              targetElem.style[key] = value;
             }
           } else {
-            data.context.style[key] = value;
+            targetElem.style[key] = value;
           }
         }
       }
@@ -959,7 +1001,7 @@ class UI4 {
     let redrawNeeded = false;
 
     dependencies.forEach((dependency) => {
-      console.log("Checking " + JSON.stringify(dependency));
+      // console.log("Checking " + JSON.stringify(dependency));
       if (dependency.animation && dependency.animation.running) {
         redrawNeeded = true;
         return;

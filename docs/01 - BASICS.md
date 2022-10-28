@@ -188,14 +188,3 @@ Of course, rather than managing sizes like this, you want to...
 Grid layout takes whatever you give it and layouts them so that they are as square as possible but
 still fill the available space. Try resizing the example to see how it behaves (handle in the
 bottom right corner).
-
-----------------
-
-### "Let them run free"
-
-<sub>EXAMPLE 01.12</sub>
-```html
-<div dock="center" left="left" width="50" height="50"></div>
-```
-<iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example_01.12.html"></iframe>
-<a style="color: #404040" href="examples/example_01.12.html">Open in full screen</a>

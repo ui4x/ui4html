@@ -162,11 +162,3 @@ Of course, rather than managing sizes like this, you want to...
 Grid layout takes whatever you give it and layouts them so that they are as square as possible but
 still fill the available space. Try resizing the example to see how it behaves (handle in the
 bottom right corner).
-
-----------------
-
-### "Let them run free"
-
-```html example solid
-<div dock="center" left="left" width="50" height="50"></div>
-```

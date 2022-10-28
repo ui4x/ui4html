@@ -53,3 +53,6 @@ Constraint solvers
 - [Constraint CSS](https://gss.github.io/guides/ccss)
 - Constraints as equations
 - Abandoned, "never used much beyond company internal implementation", "too heavy computationally"
+
+[Flutter ConstraintLayout](https://github.com/hackware1993/Flutter_ConstraintLayout)
+- Seems to tick all the boxes
