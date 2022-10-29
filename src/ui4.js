@@ -251,6 +251,16 @@ class UI4 {
     };
     this.horizontalPriority = ["width", "centerx", "left", "right"];
     this.verticalPriority = ["height", "centery", "top", "bottom"];
+    this.resolveOrder = {
+      left: 0,
+      right: 0,
+      top: 0,
+      bottom: 0,
+      width: 1,
+      height: 1,
+      centerx: 2,
+      centery: 2,
+    };
 
     const attributeOptions = Object.keys(this.getValue).join("|");
     this.idAndAttribute = new RegExp(`(?<id>([a-zA-Z]|\\d|_|-)+)\\.(?<attribute>(${attributeOptions}))`);
@@ -307,7 +317,7 @@ class UI4 {
       });
     });
     let combinedDependencies = existingDependencies.concat(newDependencies);
-    combinedDependencies = this.removeConflicts(combinedDependencies, newAttributes);
+    combinedDependencies = this.removeConflictsAndOrder(combinedDependencies, newAttributes);
     this.allDependencies[targetId] = combinedDependencies;
     combinedDependencies.forEach((dependency) => this.setSourceDependencies(targetId, dependency));
 
@@ -319,7 +329,7 @@ class UI4 {
     });
 
     this.checkDependenciesFor(targetId);
-    this.checkDependenciesFor(targetId);
+    // this.checkDependenciesFor(targetId);
   }
 
   activeCSSProperties(targetId, targetElement) {
@@ -510,14 +520,12 @@ class UI4 {
   parseAndCleanDependencies(node, specString) {
     let dependencies = this.parse(node, specString.replace(/\s/g, ""));
 
-    dependencies = this.removeConflicts(dependencies);
+    dependencies = this.removeConflictsAndOrder(dependencies);
 
-    // All connections ("=") must come before limits ("><")
-    dependencies.sort((a, b) => UI4.ordering[a.comparison] - UI4.ordering[b.comparison]);
     return dependencies;
   }
 
-  removeConflicts(dependencies, mustHave) {
+  removeConflictsAndOrder(dependencies, mustHave) {
     // Only 2 vertical and 2 horizontal attributes can be sanely constrained
 
     const targetAttributeSet = new Set(dependencies.map((dependency) => dependency.targetAttribute));
@@ -534,6 +542,15 @@ class UI4 {
         attributesToFree.forEach((attribute) => {
           dependencies = dependencies.filter((dependency) => dependency.targetAttribute !== attribute);
         });
+      }
+    });
+
+    dependencies.sort((a, b) => {
+      // All connections ("=") must come before limits ("><")
+      if (a.comparison !== b.comparison) {
+        return UI4.ordering[a.comparison] - UI4.ordering[b.comparison];
+      } else {
+        return this.resolveOrder[a.targetAttribute] - this.resolveOrder[b.targetAttribute];
       }
     });
 
@@ -951,7 +968,7 @@ class UI4 {
       for (const [targetAttribute, data] of Object.entries(finalValues)) {
         const updates = this.setValue[targetAttribute](data.context, data.sourceValue);
         for (const [key, value] of Object.entries(updates)) {
-          console.log(targetId + "." + targetAttribute + ": " + key + "=" + value);
+          console.log("Apply: " + targetId + "." + targetAttribute + ": " + key + "=" + value);
           const oldValue = targetElem.style[key];
           if (!oldValue) {
             targetElem.style[key] = value;
@@ -1001,7 +1018,7 @@ class UI4 {
     let redrawNeeded = false;
 
     dependencies.forEach((dependency) => {
-      // console.log("Checking " + JSON.stringify(dependency));
+      console.log("Check: " + targetId + "." + dependency.targetAttribute);
       if (dependency.animation && dependency.animation.running) {
         redrawNeeded = true;
         return;

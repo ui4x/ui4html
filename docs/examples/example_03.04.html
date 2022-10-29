@@ -35,9 +35,12 @@
 </head>
 <body>
 <div id="root" class="ui4Root">
-<div id="first" dock="center" width="125" height="50">Hello</div>
+<button id="first" dock="center" width="125" height="50"
+        onclick="ui4.set('second', 'top=first.top:0.3s')">
+    Hello
+</button>
 <button id="second" frame="first.frame" 
-        onclick="ui4.set(this, 'top=first.bottom:0.5s')">
+        onclick="ui4.set(this, 'top=first.bottom:0.3s')">
     Click me
 </button>
 </div>

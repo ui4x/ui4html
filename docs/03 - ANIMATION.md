@@ -42,9 +42,12 @@ ui4 JS interface can also be used to set animated constraints in event handlers:
 
 <sub>EXAMPLE 03.04</sub>
 ```html
-<div id="first" dock="center" width="125" height="50">Hello</div>
+<button id="first" dock="center" width="125" height="50"
+        onclick="ui4.set('second', 'top=first.top:0.3s')">
+    Hello
+</button>
 <button id="second" frame="first.frame" 
-        onclick="ui4.set(this, 'top=first.bottom:0.5s')">
+        onclick="ui4.set(this, 'top=first.bottom:0.3s')">
     Click me
 </button>
 ```

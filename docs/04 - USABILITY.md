@@ -43,7 +43,7 @@ the same priority order as shown above.
 <sub>EXAMPLE 04.02</sub>
 ```html
 <button centerx="centerx" left="centerx-100" height="50" centery="centery"
-        onclick="ui4.set(this, 'right=right')">
+        onclick="ui4.set(this, 'right=right:0.5s')">
     Click to expand
 </button>
 ```
