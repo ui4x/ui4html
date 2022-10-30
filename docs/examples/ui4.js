@@ -13,8 +13,9 @@ class UI4 {
     position: "absolute",
     margin: 0,
     outline: 0,
-    padding: 0,
+    // padding: 0,
     boxSizing: "border-box",
+    zIndex: 0,
   };
 
   static LEADING = "leading";
@@ -91,6 +92,13 @@ class UI4 {
     betweenstart: ["min", "min"],
     betweenend: ["max", "max"],
     between: ["min", "max"],
+  };
+
+  static layers = {
+    lower: -1000,
+    lowest: -2000,
+    higher: 1000,
+    highest: 2000,
   };
 
   static operations = {
@@ -507,7 +515,7 @@ class UI4 {
 
     for (const attribute of node.attributes) {
       const name = attribute.name;
-      if (name in this.setValue || name in UI4.composites || ["dock", "fit", "layout", "gap"].includes(name)) {
+      if (name in this.setValue || name in UI4.composites || ["dock", "fit", "layout", "gap", "layer"].includes(name)) {
         for (const singleConstraint of attribute.value.split(";")) {
           const fullConstraint = `${attribute.name}=${singleConstraint}`;
           constraintArray.push(fullConstraint);
@@ -716,6 +724,12 @@ class UI4 {
       }
     } else if (targetAttribute === "gap") {
       this.gaps[node.id] = parseFloat(sourceSpec);
+    } else if (targetAttribute === "layer") {
+      if (sourceSpec in UI4.layers) {
+        node.style.zIndex = UI4.layers[sourceSpec];
+      } else {
+        throw SyntaxError(`Unknown layer definition for node id ${node.id}: ${sourceSpec}`);
+      }
     } else {
       console.error(`Unknown target attribute: ${targetAttribute}`);
     }
@@ -803,13 +817,14 @@ class UI4 {
 
   finalizeIdAndAttributeTree(node, targetAttribute, sourceTree) {
     const _this = this;
-    // const _node = node;
+    const _node = node;
     const walker = function (treeNode) {
       switch (treeNode.type) {
         case UI4.ID_AND_ATTRIBUTE:
           if (!(treeNode.value.attribute in _this.getValue)) {
             throw SyntaxError(`Unknown attribute in '${treeNode.value.id}.${treeNode.value.attribute}'`);
           }
+          _this.resolveRelativeId(treeNode, _node);
           treeNode.function = _this.getIdAndAttributeValue.bind(_this);
           return treeNode.value.id; // Return dependency IDs
         case UI4.KEYWORD:
@@ -849,6 +864,33 @@ class UI4 {
     const uniqueDependencyIDs = new Set(dependencyIDs);
     uniqueDependencyIDs.delete(undefined);
     return [...uniqueDependencyIDs];
+  }
+
+  resolveRelativeId(treeNode, node) {
+    // console.log("HERE " + treeNode.id)
+    // Update relative id with a concrete id, if applicable
+    let relativeIndex = 0;
+    if (treeNode.value.id === "previous") {
+      relativeIndex = -1;
+    } else if (treeNode.value.id === "next") {
+      relativeIndex = 1;
+    } else {
+      return;
+    }
+
+    const children = node.parentNode.children;
+    const indexOfDependency = Array.from(children).indexOf(node) + relativeIndex;
+    const dependency = children.item(indexOfDependency);
+
+    if (!dependency) {
+      console.error(`Element id ${node.id}: No ${treeNode.id} sibling at index ${indexOfDependency}`);
+      return;
+    }
+    if (!dependency.id) {
+      dependency.id = "ui4ID" + this.idCounter++;
+    }
+
+    treeNode.value.id = dependency.id;
   }
 
   getIdAndAttributeValue(targetElem, treeNode, resultContext) {
@@ -968,7 +1010,7 @@ class UI4 {
       for (const [targetAttribute, data] of Object.entries(finalValues)) {
         const updates = this.setValue[targetAttribute](data.context, data.sourceValue);
         for (const [key, value] of Object.entries(updates)) {
-          console.log(targetId + "." + targetAttribute + ": " + key + "=" + value);
+          console.log("Apply: " + targetId + "." + targetAttribute + ": " + key + "=" + value);
           const oldValue = targetElem.style[key];
           if (!oldValue) {
             targetElem.style[key] = value;
@@ -1019,7 +1061,6 @@ class UI4 {
 
     dependencies.forEach((dependency) => {
       console.log("Check: " + targetId + "." + dependency.targetAttribute);
-      // console.log("Checking " + JSON.stringify(dependency));
       if (dependency.animation && dependency.animation.running) {
         redrawNeeded = true;
         return;
