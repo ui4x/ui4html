@@ -101,14 +101,14 @@ class UI4 {
     highest: 2000,
   };
 
-  static relativeIds = {
+  static relativeIDs = {
     previous: -1,
     beforeprevious: -2,
     next: 1,
     afterNext: 2,
   };
 
-  static absoluteIds = {
+  static absoluteIDs = {
     first: 0,
     second: 1,
     last: -1,
@@ -217,6 +217,7 @@ class UI4 {
         }
         return bottom - top + 2 * gap;
       },
+      layer: (context) => context.getStyle.zIndex,
     };
 
     this.setValue = {
@@ -270,6 +271,9 @@ class UI4 {
           return { top: value - context.targetElem.offsetHeight / 2 + "px" };
         }
       },
+      layer: function (context, value) {
+        return { zIndex: value };
+      },
     };
     this.horizontalPriority = ["width", "centerx", "left", "right"];
     this.verticalPriority = ["height", "centery", "top", "bottom"];
@@ -301,9 +305,9 @@ class UI4 {
   }
 
   // Gap is the only externally-settable parameter
-  gap(elementId) {
-    if (elementId in this.gaps) {
-      return this.gaps[elementId];
+  gap(elementID) {
+    if (elementID in this.gaps) {
+      return this.gaps[elementID];
     }
     return this._gap;
   }
@@ -313,18 +317,18 @@ class UI4 {
     this.checkDependencies();
   }
 
-  set(elementOrId, dependency) {
-    let element = elementOrId;
-    if (typeof elementOrId === "string") {
-      element = document.getElementById(elementOrId);
+  set(elementOrID, dependency) {
+    let element = elementOrID;
+    if (typeof elementOrID === "string") {
+      element = document.getElementById(elementOrID);
     }
-    const targetId = element.id;
+    const targetID = element.id;
 
-    const lockedCSSPropertiesBeforeChange = this.activeCSSProperties(targetId, element);
+    const lockedCSSPropertiesBeforeChange = this.activeCSSProperties(targetID, element);
 
     const newDependencies = this.parseAndCleanDependencies(element, dependency);
     const newAttributes = new Set(newDependencies.map((dependency) => dependency.targetAttribute));
-    const existingDependencies = this.allDependencies[targetId] || [];
+    const existingDependencies = this.allDependencies[targetID] || [];
     existingDependencies.forEach((dependency) => {
       newDependencies.forEach((newDependency, index) => {
         if (
@@ -334,29 +338,29 @@ class UI4 {
           dependency.value = newDependency.value;
           dependency.animation = newDependency.animation;
           newDependencies.splice(index, 1);
-          this.setSourceDependencies(targetId, dependency);
+          this.setSourceDependencies(targetID, dependency);
         }
       });
     });
     let combinedDependencies = existingDependencies.concat(newDependencies);
     combinedDependencies = this.removeConflictsAndOrder(combinedDependencies, newAttributes);
-    this.allDependencies[targetId] = combinedDependencies;
-    combinedDependencies.forEach((dependency) => this.setSourceDependencies(targetId, dependency));
+    this.allDependencies[targetID] = combinedDependencies;
+    combinedDependencies.forEach((dependency) => this.setSourceDependencies(targetID, dependency));
 
-    const lockedCSSPropertiesAfterChange = this.activeCSSProperties(targetId, element);
+    const lockedCSSPropertiesAfterChange = this.activeCSSProperties(targetID, element);
     lockedCSSPropertiesBeforeChange.forEach((property) => {
       if (!lockedCSSPropertiesAfterChange.has(property)) {
         element.style.removeProperty(property);
       }
     });
 
-    this.checkDependenciesFor(targetId);
-    // this.checkDependenciesFor(targetId);
+    this.checkDependenciesFor(targetID);
+    // this.checkDependenciesFor(targetID);
   }
 
-  activeCSSProperties(targetId, targetElement) {
+  activeCSSProperties(targetID, targetElement) {
     const cssProperties = new Set();
-    const dependencies = this.allDependencies[targetId];
+    const dependencies = this.allDependencies[targetID];
     const context = {
       targetElem: targetElement,
       dependencies: dependencies,
@@ -444,9 +448,9 @@ class UI4 {
       if (!node.getAttribute) return;
       node.id = "ui4ID" + this.idCounter++;
     }
-    const targetId = node.id;
+    const targetID = node.id;
 
-    // this.gaps[targetId] = undefined;
+    // this.gaps[targetID] = undefined;
 
     // const ui4AnimationID = node.getAttribute("ui4anim");
 
@@ -461,18 +465,18 @@ class UI4 {
         return;
       }
       if (!dependencies.length) {
-        if (targetId in this.allDependencies) {
-          for (const dependency of this.allDependencies[targetId]) {
+        if (targetID in this.allDependencies) {
+          for (const dependency of this.allDependencies[targetID]) {
             if (typeof dependency.value === "object" && "dependencyIDs" in dependency.value) {
-              dependency.value.dependencyIDs.forEach((sourceID) => delete this.sourceDependencies[sourceID][targetId]);
+              dependency.value.dependencyIDs.forEach((sourceID) => delete this.sourceDependencies[sourceID][targetID]);
             }
           }
         }
-        delete this.allDependencies[targetId];
+        delete this.allDependencies[targetID];
       } else {
-        this.allDependencies[targetId] = dependencies;
+        this.allDependencies[targetID] = dependencies;
         for (const dependency of dependencies) {
-          this.setSourceDependencies(targetId, dependency);
+          this.setSourceDependencies(targetID, dependency);
         }
       }
     }
@@ -497,12 +501,12 @@ class UI4 {
     node.childNodes.forEach((childNode) => this.setDependencies(childNode));
   }
 
-  setSourceDependencies(targetId, dependency) {
+  setSourceDependencies(targetID, dependency) {
     if (typeof dependency.value === "object" && "dependencyIDs" in dependency.value) {
       dependency.value.dependencyIDs.forEach((sourceID) => {
-        const targetIds = this.sourceDependencies[sourceID] || {};
-        targetIds[targetId] = true;
-        this.sourceDependencies[sourceID] = targetIds;
+        const targetIDs = this.sourceDependencies[sourceID] || {};
+        targetIDs[targetID] = true;
+        this.sourceDependencies[sourceID] = targetIDs;
       });
     }
   }
@@ -529,7 +533,7 @@ class UI4 {
 
     for (const attribute of node.attributes) {
       const name = attribute.name;
-      if (name in this.setValue || name in UI4.composites || ["dock", "fit", "layout", "gap", "layer"].includes(name)) {
+      if (name in this.setValue || name in UI4.composites || ["dock", "fit", "layout", "gap"].includes(name)) {
         for (const singleConstraint of attribute.value.split(";")) {
           const fullConstraint = `${attribute.name}=${singleConstraint}`;
           constraintArray.push(fullConstraint);
@@ -630,7 +634,7 @@ class UI4 {
   parseCoreSpec(node, targetAttribute, comparison, sourceSpec, dependencies, animationOptions) {
     if (targetAttribute in this.setValue) {
       const sourceTree = new UI4.Parser().parse(sourceSpec);
-      sourceTree.dependencyIDs = this.finalizeIdAndAttributeTree(node, targetAttribute, sourceTree);
+      sourceTree.dependencyIDs = this.finalizeIDAndAttributeTree(node, targetAttribute, sourceTree);
       if (sourceTree.type === UI4.KEYWORD && sourceTree.value === "free") {
         const allDependencies = this.allDependencies[node.id] || [];
         allDependencies[node.id].forEach((dependency, index) => {
@@ -686,9 +690,9 @@ class UI4 {
       if (!handled) {
         for (const [dockAttribute, attributes] of Object.entries(UI4.parentDock)) {
           if (sourceSpec.startsWith(dockAttribute)) {
-            const parentId = node.parentNode.id;
+            const parentID = node.parentNode.id;
             attributes.forEach((attribute) => {
-              const modifiedSourceSpec = sourceSpec.replace(dockAttribute, `${parentId}.${attribute}`);
+              const modifiedSourceSpec = sourceSpec.replace(dockAttribute, `${parentID}.${attribute}`);
               this.parseCoreSpec(node, attribute, comparison, modifiedSourceSpec, dependencies, animationOptions);
             });
             handled = true;
@@ -731,19 +735,13 @@ class UI4 {
         ) {
           throw SyntaxError(`Parse error for layout: ${sourceSpec}`);
         }
-        this.finalizeIdAndAttributeTree(node, targetAttribute, sourceTree);
+        this.finalizeIDAndAttributeTree(node, targetAttribute, sourceTree);
       }
       if (sourceTree) {
         this.layouts[node.id] = sourceTree;
       }
     } else if (targetAttribute === "gap") {
       this.gaps[node.id] = parseFloat(sourceSpec);
-    } else if (targetAttribute === "layer") {
-      if (sourceSpec in UI4.layers) {
-        node.style.zIndex = UI4.layers[sourceSpec];
-      } else {
-        throw SyntaxError(`Unknown layer definition for node id ${node.id}: ${sourceSpec}`);
-      }
     } else {
       console.error(`Unknown target attribute: ${targetAttribute}`);
     }
@@ -829,7 +827,7 @@ class UI4 {
     return true;
   }
 
-  finalizeIdAndAttributeTree(node, targetAttribute, sourceTree) {
+  finalizeIDAndAttributeTree(node, targetAttribute, sourceTree) {
     const _this = this;
     const _node = node;
     const walker = function (treeNode) {
@@ -838,12 +836,16 @@ class UI4 {
           if (!(treeNode.value.attribute in _this.getValue)) {
             throw SyntaxError(`Unknown attribute in '${treeNode.value.id}.${treeNode.value.attribute}'`);
           }
-          _this.resolveRelativeId(treeNode, _node);
-          treeNode.function = _this.getIdAndAttributeValue.bind(_this);
+          _this.resolveRelativeID(treeNode, _node);
+          treeNode.function = _this.getIDAndAttributeValue.bind(_this);
           return treeNode.value.id; // Return dependency IDs
         case UI4.KEYWORD:
           if (treeNode.value === "gap") {
             treeNode.function = (targetElem, treeNode, result) => _this.gap(targetElem);
+            return;
+          } else if (treeNode.value in UI4.layers) {
+            treeNode.type = "number";
+            treeNode.value = UI4.layers[treeNode.value];
             return;
           }
           // Rewrite sole attributes to be full references to parent attribute
@@ -853,7 +855,7 @@ class UI4 {
               id: node.parentElement.id,
               attribute: treeNode.value,
             };
-            treeNode.function = _this.getIdAndAttributeValue.bind(_this);
+            treeNode.function = _this.getIDAndAttributeValue.bind(_this);
             return treeNode.value.id;
           } else {
             throw SyntaxError(`Unknown keyword '${treeNode.value}'`);
@@ -880,7 +882,7 @@ class UI4 {
     return [...uniqueDependencyIDs];
   }
 
-  resolveRelativeId(treeNode, node) {
+  resolveRelativeID(treeNode, node) {
     // console.log("HERE " + treeNode.id)
     // Update relative id with a concrete id, if applicable
     const id = treeNode.value.id;
@@ -889,10 +891,10 @@ class UI4 {
     const referenceIndex = childrenList.indexOf(node);
 
     let indexOfDependency;
-    if (id in UI4.relativeIds) {
-      indexOfDependency = referenceIndex + UI4.relativeIds[id];
-    } else if (id in UI4.absoluteIds) {
-      const index = UI4.absoluteIds[id];
+    if (id in UI4.relativeIDs) {
+      indexOfDependency = referenceIndex + UI4.relativeIDs[id];
+    } else if (id in UI4.absoluteIDs) {
+      const index = UI4.absoluteIDs[id];
       if (index > 0) {
         indexOfDependency = index;
       } else {
@@ -914,7 +916,7 @@ class UI4 {
     treeNode.value.id = dependency.id;
   }
 
-  getIdAndAttributeValue(targetElem, treeNode, resultContext) {
+  getIDAndAttributeValue(targetElem, treeNode, resultContext) {
     const id = treeNode.value.id;
     const attribute = treeNode.value.attribute;
     const attributeType = UI4.attrType[attribute];
@@ -995,9 +997,9 @@ class UI4 {
         });
       }
     }
-    for (const targetId of toCheck) {
-      if (targetId in this.allDependencies || targetId in this.layouts) {
-        this.checkDependenciesFor(targetId);
+    for (const targetID of toCheck) {
+      if (targetID in this.allDependencies || targetID in this.layouts) {
+        this.checkDependenciesFor(targetID);
       }
     }
   }
@@ -1008,19 +1010,19 @@ class UI4 {
 
   checkAllDependencies() {
     let redrawNeeded = false;
-    for (const [targetId, dependencies] of Object.entries(this.allDependencies)) {
-      redrawNeeded = this.checkDependenciesFor(targetId, dependencies);
+    for (const [targetID, dependencies] of Object.entries(this.allDependencies)) {
+      redrawNeeded = this.checkDependenciesFor(targetID, dependencies);
     }
     if (redrawNeeded) {
       requestAnimationFrame(this.checkDependencies.bind(this));
     }
   }
 
-  checkDependenciesFor(targetId) {
+  checkDependenciesFor(targetID) {
     let redrawNeeded = false;
-    if (targetId in this.allDependencies) {
-      const targetElem = document.getElementById(targetId);
-      let checkResults = this.checkResults(targetId);
+    if (targetID in this.allDependencies) {
+      const targetElem = document.getElementById(targetID);
+      let checkResults = this.checkResults(targetID);
 
       let finalValues = checkResults[0];
       if (checkResults[1]) {
@@ -1031,7 +1033,7 @@ class UI4 {
       for (const [targetAttribute, data] of Object.entries(finalValues)) {
         const updates = this.setValue[targetAttribute](data.context, data.sourceValue);
         for (const [key, value] of Object.entries(updates)) {
-          console.log("Apply: " + targetId + "." + targetAttribute + ": " + key + "=" + value);
+          console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
           const oldValue = targetElem.style[key];
           if (!oldValue) {
             targetElem.style[key] = value;
@@ -1040,7 +1042,7 @@ class UI4 {
 
           // Remove oscillating jitter caused by floating point rounding error
           const valueAsNumber = parseFloat(value);
-          const valueKey = `${targetId}.${targetAttribute}`;
+          const valueKey = `${targetID}.${targetAttribute}`;
           this.previousValues[valueKey] = this.previousValues[valueKey] || [];
           const values = this.previousValues[valueKey];
           values.push(valueAsNumber);
@@ -1059,9 +1061,9 @@ class UI4 {
     }
 
     // Apply layouts, if any, to children, if any
-    const layouts = this.layouts[targetId];
+    const layouts = this.layouts[targetID];
     if (layouts) {
-      const container = document.getElementById(targetId);
+      const container = document.getElementById(targetID);
       if (layouts.value === "grid") {
         this.grid_layout(container);
       } else if (layouts.value === "columns") {
@@ -1074,14 +1076,14 @@ class UI4 {
     return redrawNeeded;
   }
 
-  checkResults(targetId) {
-    const targetElem = document.getElementById(targetId);
-    const dependencies = this.allDependencies[targetId];
+  checkResults(targetID) {
+    const targetElem = document.getElementById(targetID);
+    const dependencies = this.allDependencies[targetID];
     let values = {};
     let redrawNeeded = false;
 
     dependencies.forEach((dependency) => {
-      console.log("Check: " + targetId + "." + dependency.targetAttribute);
+      console.log("Check: " + targetID + "." + dependency.targetAttribute);
       if (dependency.animation && dependency.animation.running) {
         redrawNeeded = true;
         return;
@@ -1162,10 +1164,10 @@ class UI4 {
 
     if ("aspect" in condition) {
       let referenceElement;
-      if ("elemId" in condition) {
-        referenceElement = document.getElementById(condition.elemId);
+      if ("elemID" in condition) {
+        referenceElement = document.getElementById(condition.elemID);
         if (!referenceElement) {
-          console.error("Could not find source element with id " + condition.elemId);
+          console.error("Could not find source element with id " + condition.elemID);
           return false;
         }
       } else {
@@ -1249,20 +1251,20 @@ class UI4 {
   }
 
   gapAdjustment(source, target) {
-    const parentId = target.context.parentElem.id;
+    const parentID = target.context.parentElem.id;
     if (source.contained) {
       // aligned
       if (source.type === UI4.LEADING && target.type === UI4.LEADING) {
-        return this.gap(parentId);
+        return this.gap(parentID);
       } else if (source.type === UI4.TRAILING && target.type === UI4.TRAILING) {
-        return -this.gap(parentId);
+        return -this.gap(parentID);
       }
     } else {
       // butting
       if (source.type === UI4.LEADING && target.type === UI4.TRAILING) {
-        return -this.gap(parentId);
+        return -this.gap(parentID);
       } else if (source.type === UI4.TRAILING && target.type === UI4.LEADING) {
-        return this.gap(parentId);
+        return this.gap(parentID);
       }
     }
 
@@ -1416,7 +1418,7 @@ UI4.Parser = class {
 
     const TOKEN_TYPES = [
       "(?<idAndAttribute>([a-zA-Z]|\\d|_|-)+\\.([a-zA-Z]+))",
-      "(?<keyword>gap|left|right|top|bottom|centerx|centery|width|height|position|size|frame)",
+      "(?<keyword>gap|left|right|top|bottom|centerx|centery|width|height|position|size|frame|lower|lowest|higher|highest)",
       "(?<function>min|max|share|grid|columns|rows)",
       "(?<duration>[\\d\\.]+s)",
       "(?<easing>linear|ease\\-in\\-out|ease\\-in|ease\\-out|ease)", // Order is significant
