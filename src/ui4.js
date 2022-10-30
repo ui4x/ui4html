@@ -101,6 +101,20 @@ class UI4 {
     highest: 2000,
   };
 
+  static relativeIds = {
+    previous: -1,
+    beforeprevious: -2,
+    next: 1,
+    afterNext: 2,
+  };
+
+  static absoluteIds = {
+    first: 0,
+    second: 1,
+    last: -1,
+    secondtolast: -2,
+  };
+
   static operations = {
     "+": (a, b) => a + b,
     "-": (a, b) => a - b,
@@ -869,21 +883,28 @@ class UI4 {
   resolveRelativeId(treeNode, node) {
     // console.log("HERE " + treeNode.id)
     // Update relative id with a concrete id, if applicable
-    let relativeIndex = 0;
-    if (treeNode.value.id === "previous") {
-      relativeIndex = -1;
-    } else if (treeNode.value.id === "next") {
-      relativeIndex = 1;
+    const id = treeNode.value.id;
+    const children = node.parentNode.children;
+    const childrenList = Array.from(children);
+    const referenceIndex = childrenList.indexOf(node);
+
+    let indexOfDependency;
+    if (id in UI4.relativeIds) {
+      indexOfDependency = referenceIndex + UI4.relativeIds[id];
+    } else if (id in UI4.absoluteIds) {
+      const index = UI4.absoluteIds[id];
+      if (index > 0) {
+        indexOfDependency = index;
+      } else {
+        indexOfDependency = childrenList.length + index;
+      }
     } else {
       return;
     }
 
-    const children = node.parentNode.children;
-    const indexOfDependency = Array.from(children).indexOf(node) + relativeIndex;
     const dependency = children.item(indexOfDependency);
-
     if (!dependency) {
-      console.error(`Element id ${node.id}: No ${treeNode.id} sibling at index ${indexOfDependency}`);
+      console.error(`Element id ${node.id}: No ${treeNode.value.id} sibling at index ${indexOfDependency}`);
       return;
     }
     if (!dependency.id) {
