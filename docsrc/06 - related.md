@@ -56,3 +56,9 @@ Constraint solvers
 
 [Flutter ConstraintLayout](https://github.com/hackware1993/Flutter_ConstraintLayout)
 - Seems to tick all the boxes
+- Some things to ~~steal~~ learn from:
+  - Control over z - idea: layer=lower, lowest, higher, highest, id.lower, id.higher
+  - Relative references to other elements - idea: previous.below, next, peer()
+  - ratio, again - ratio=16/9, translates to setting the unset dimension
+  - translate, rotate?
+  - polar coordinates? - angle, distance
