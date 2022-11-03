@@ -8,7 +8,7 @@ examples:
 
 ---------------
 
-### "Connect this to the corner"
+### Connect to the edges
 
 <sub>EXAMPLE 01.01</sub>
 ```html
@@ -28,7 +28,7 @@ and `centery`.
 
 ---------------
 
-### "Can I have an alternative syntax, please"
+### Alternative syntax
 
 <sub>EXAMPLE 01.02</sub>
 ```html
@@ -43,7 +43,7 @@ no effect on the final result.
 
 ---------------
 
-### "Connect A to B"
+### Connect peer elements
 
 <sub>EXAMPLE 01.03</sub>
 ```html
@@ -59,7 +59,7 @@ whenever they are "pushing" against each other.
 
 ---------------
 
-### "I want them closer, and I am not afraid of some math"
+### Fine-tuning
 
 <sub>EXAMPLE 01.04</sub>
 ```html
@@ -79,7 +79,7 @@ is used to make sure there is only 1 pixel between A and B, no matter what the g
 
 ---------------
 
-### "Just put it in the center"
+### Docking shortcuts
 
 <sub>EXAMPLE 01.05</sub>
 ```html
@@ -93,7 +93,7 @@ convenient and easier-to-read options.
 
 ---------------
 
-### "This is a top banner"
+### Docking to edges
 
 <sub>EXAMPLE 01.06</sub>
 ```html
@@ -113,7 +113,7 @@ All the options for docking to the parent are:
 
 ---------------
 
-### "Put A above B"
+### Dock to a peer element
 
 <sub>EXAMPLE 01.07</sub>
 ```html
@@ -127,7 +127,7 @@ beside another one and set the shared dimension (width in the example above) to 
 
 ---------------
 
-### "A should be between these two guys"
+### Docking between other elements
 
 <sub>EXAMPLE 01.08</sub>
 ```html
@@ -145,7 +145,7 @@ and position).
 
 ---------------
 
-### "...no, I mean stretched all the way between them"
+### Filling the available space
 
 <sub>EXAMPLE 01.09</sub>
 ```html
@@ -156,25 +156,39 @@ and position).
 
 ---------------
 
-### "This is a third of the size of the whole thing"
+### Fix the aspect ratio
 
 <sub>EXAMPLE 01.10</sub>
 ```html
-<div id="one_third" dock="left" width="share(1, 3)"></div>
+<div centery="centery" centerx="width/3" width="100" ratio="16/9"></div>
+<div centery="centery" centerx="width*2/3" height="100" ratio="16/9"></div>
 ```
 <iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example_01.10.html"></iframe>
 <a style="color: #404040" href="examples/example_01.10.html">Open in full screen</a>
 
-Because of the gaps, just dividing the width by 3 is not accurate, so we use a convenience function
-for getting "gap-observing" shares of the whole.
-
-Of course, rather than managing sizes like this, you want to...
+Using `ratio` can be more readable than an equivalent `width="100" height="this.width * 9/16"`.
 
 ---------------
 
-### "Just throw some boxes in there"
+### Taking a relative share of the available space
 
 <sub>EXAMPLE 01.11</sub>
+```html
+<div dock="left" width="share(1, 3)"></div>
+```
+<iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example_01.11.html"></iframe>
+<a style="color: #404040" href="examples/example_01.11.html">Open in full screen</a>
+
+Because of the gaps, just dividing the width by 3 is not accurate, so we use a convenience function
+for getting "gap-observing" shares of the whole.
+
+Of course, rather than managing sizes like this, you might want to use a ...
+
+---------------
+
+### Grid
+
+<sub>EXAMPLE 01.12</sub>
 ```html
 <div id="resizable" layout="grid">
     <div></div>
@@ -182,8 +196,8 @@ Of course, rather than managing sizes like this, you want to...
     <div></div>
 </div>
 ```
-<iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example_01.11.html"></iframe>
-<a style="color: #404040" href="examples/example_01.11.html">Open in full screen</a>
+<iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example_01.12.html"></iframe>
+<a style="color: #404040" href="examples/example_01.12.html">Open in full screen</a>
 
 Grid layout takes whatever you give it and layouts them so that they are as square as possible but
 still fill the available space. Try resizing the example to see how it behaves (handle in the

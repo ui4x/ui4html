@@ -102,8 +102,9 @@ class UI4 {
   };
 
   static relativeIDs = {
-    previous: -1,
     beforeprevious: -2,
+    previous: -1,
+    this: 0,
     next: 1,
     afterNext: 2,
   };
@@ -446,7 +447,7 @@ class UI4 {
     // We need the node to have an id from this point forward
     if (!node.id) {
       if (!node.getAttribute) return;
-      node.id = "ui4ID" + this.idCounter++;
+      node.id = "ui4id" + this.idCounter++;
     }
     const targetID = node.id;
 
@@ -533,7 +534,7 @@ class UI4 {
 
     for (const attribute of node.attributes) {
       const name = attribute.name;
-      if (name in this.setValue || name in UI4.composites || ["dock", "fit", "layout", "gap"].includes(name)) {
+      if (name in this.setValue || name in UI4.composites || ["dock", "fit", "layout", "gap", "ratio"].includes(name)) {
         for (const singleConstraint of attribute.value.split(";")) {
           const fullConstraint = `${attribute.name}=${singleConstraint}`;
           constraintArray.push(fullConstraint);
@@ -546,15 +547,42 @@ class UI4 {
   parseAndCleanDependencies(node, specString) {
     let dependencies = this.parse(node, specString.replace(/\s/g, ""));
 
-    dependencies = this.removeConflictsAndOrder(dependencies);
+    dependencies = this.removeConflictsAndOrder(dependencies, node);
 
     return dependencies;
   }
 
-  removeConflictsAndOrder(dependencies, mustHave) {
+  removeConflictsAndOrder(dependencies, node, mustHave) {
     // Only 2 vertical and 2 horizontal attributes can be sanely constrained
-
     const targetAttributeSet = new Set(dependencies.map((dependency) => dependency.targetAttribute));
+
+    if (targetAttributeSet.has("ratio")) {
+      targetAttributeSet.delete("ratio");
+      dependencies.forEach((dependency, index) => {
+        if (dependency.targetAttribute === "ratio") {
+          let sourceSpec;
+          let attribute;
+          if (targetAttributeSet.has("width") && !targetAttributeSet.has("height")) {
+            sourceSpec = `${node.id}.width/(${dependency.value})`;
+            attribute = "height";
+          } else if (targetAttributeSet.has("height") && !targetAttributeSet.has("width")) {
+            sourceSpec = `${node.id}.height*(${dependency.value})`;
+            attribute = "width";
+          }
+          if (sourceSpec) {
+            console.log(sourceSpec);
+            const tempDependencies = [];
+            this.parseCoreSpec(node, attribute, "=", sourceSpec, tempDependencies, dependency.animation);
+            const newDependency = tempDependencies[0];
+            dependencies[index] = newDependency;
+            console.log(JSON.stringify(newDependency));
+            targetAttributeSet.add(attribute);
+          } else {
+            console.error("ratio is only effective if exactly one of width and height is defined");
+          }
+        }
+      });
+    }
 
     [this.horizontalPriority, this.verticalPriority].forEach((dimension) => {
       // Move any "must have" attributes to the start
@@ -668,6 +696,13 @@ class UI4 {
           this.parseCoreSpec(node, expandedAttribute, comparison, modifiedSourceSpec, dependencies, animationOptions);
         });
       }
+    } else if (targetAttribute === "ratio") {
+      dependencies.push({
+        targetAttribute: targetAttribute,
+        comparison: comparison,
+        value: sourceSpec,
+        animation: animationOptions,
+      });
     } else if (targetAttribute === "dock") {
       let handled = false;
       for (const [dockAttribute, attributes] of Object.entries(UI4.peerDock)) {
@@ -814,8 +849,8 @@ class UI4 {
       const match = sourceSpec.match(centersRE);
 
       if (match) {
-        const id1 = match.groups.id1;
-        const id2 = match.groups.id2;
+        const id1 = this.resolveRelativeID(match.groups.id1, node);
+        const id2 = this.resolveRelativeID(match.groups.id2, node);
 
         this.parseCoreSpec(node, "centerx", "=", `(${id1}.centerx+${id2}.centerx)/2`, dependencies, animationOptions);
         this.parseCoreSpec(node, "centery", "=", `(${id1}.centery+${id2}.centery)/2`, dependencies, animationOptions);
@@ -836,7 +871,7 @@ class UI4 {
           if (!(treeNode.value.attribute in _this.getValue)) {
             throw SyntaxError(`Unknown attribute in '${treeNode.value.id}.${treeNode.value.attribute}'`);
           }
-          _this.resolveRelativeID(treeNode, _node);
+          treeNode.value.id = _this.resolveRelativeID(treeNode.value.id, _node);
           treeNode.function = _this.getIDAndAttributeValue.bind(_this);
           return treeNode.value.id; // Return dependency IDs
         case UI4.KEYWORD:
@@ -882,10 +917,9 @@ class UI4 {
     return [...uniqueDependencyIDs];
   }
 
-  resolveRelativeID(treeNode, node) {
+  resolveRelativeID(id, node) {
     // console.log("HERE " + treeNode.id)
     // Update relative id with a concrete id, if applicable
-    const id = treeNode.value.id;
     const children = node.parentNode.children;
     const childrenList = Array.from(children);
     const referenceIndex = childrenList.indexOf(node);
@@ -901,19 +935,19 @@ class UI4 {
         indexOfDependency = childrenList.length + index;
       }
     } else {
-      return;
+      return id;
     }
 
     const dependency = children.item(indexOfDependency);
     if (!dependency) {
-      console.error(`Element id ${node.id}: No ${treeNode.value.id} sibling at index ${indexOfDependency}`);
+      console.error(`Element id ${node.id}: No ${id} sibling at index ${indexOfDependency}`);
       return;
     }
     if (!dependency.id) {
       dependency.id = "ui4ID" + this.idCounter++;
     }
 
-    treeNode.value.id = dependency.id;
+    return dependency.id;
   }
 
   getIDAndAttributeValue(targetElem, treeNode, resultContext) {
@@ -1622,16 +1656,10 @@ UI4.Parser = class {
 
   getNode(operator, left, right) {
     // Return a node combining the operator and left and right sides, or if possible, already calculated number node
-    const operations = {
-      "+": (a, b) => a + b,
-      "-": (a, b) => a - b,
-      "*": (a, b) => a * b,
-      "/": (a, b) => a / b,
-    };
     if (left && left.type === this.NUMBER && right && right.type === this.NUMBER) {
       return {
         type: this.NUMBER,
-        value: operations[operator](left.value, right.value),
+        value: UI4.operations[operator](left.value, right.value),
       };
     } else {
       return {

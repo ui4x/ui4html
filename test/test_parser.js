@@ -24,6 +24,14 @@ describe("Parser.parse", () => {
       value: 0.5,
     });
   });
+  it("returns a calculation as already calculated, when possible", async () => {
+    expect(parser.parse("id1.width/(16/8)")).to.deep.equal({
+      type: "operator",
+      operator: "/",
+      left: { type: "idAndAttribute", value: { id: "id1", attribute: "width" } },
+      right: { type: "number", value: 2 },
+    });
+  });
   it("understands keywords and id/attribute combos", async () => {
     expect(parser.parse("id1.left+gap")).to.deep.equal({
       type: "operator",
@@ -58,17 +66,11 @@ describe("Parser.parse", () => {
   });
   it("errors with general syntax error", async () => {
     const freshParser = new Parser();
-    expect(freshParser.parse.bind(freshParser, "1++2")).to.throw(
-      SyntaxError,
-      /Unexpected operator: \+/
-    );
+    expect(freshParser.parse.bind(freshParser, "1++2")).to.throw(SyntaxError, /Unexpected operator: \+/);
   });
   it("errors with missing parenthesis", async () => {
     const freshParser = new Parser();
-    expect(freshParser.parse.bind(freshParser, "1+(2+3")).to.throw(
-      SyntaxError,
-      /Missing closing parenthesis/
-    );
+    expect(freshParser.parse.bind(freshParser, "1+(2+3")).to.throw(SyntaxError, /Missing closing parenthesis/);
   });
   it("errors with garbled function parameters", async () => {
     const freshParser = new Parser();

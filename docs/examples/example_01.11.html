@@ -5,7 +5,7 @@
     <title>ui4 Example 01.11</title>
     <script src="ui4.js"></script>
     <style>
-        div#resizable > * {
+        div#root > * {
             background-color: cornflowerblue;
             color: white;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
@@ -14,25 +14,30 @@
             justify-content: center;
             align-items: center;
         }
-        div#resizable {
-            position: absolute;
-            left: 0;
-            top: 0;
-            resize: both;
-            overflow: auto;
-            width: 80%;
-            height: 80%;
-            border: solid 1px cornflowerblue;
+        button {
+            border: 1px solid cornflowerblue;
+        }
+        button:hover {
+            background-color: #759fea;
+        }
+        button:active {
+            background-color: #1261e8;
+        }
+        div#b {
+            color: black;
+            background-color: #eeeeee;
+        }
+        div#c {
+            color: black;
+            background-color: #eeeeee;
         }
     </style>
 </head>
 <body>
 <div id="root" class="ui4Root">
-<div id="resizable" layout="grid">
-    <div></div>
-    <div></div>
-    <div></div>
-</div>
+<div dock="left" width="share(1, 3)"></div>
+<div dock="center" height="previous.height" width="share(1, 3)" style="background-color: #eeeeee" ></div>
+<div dock="right" width="share(1, 3)" style="background-color: #eeeeee" ></div>
 </div>
 </body>
 </html>

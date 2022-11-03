@@ -8,7 +8,7 @@ examples:
 
 ---------------
 
-### "Connect this to the corner"
+### Connect to the edges
 
 ```html example solid_sized
 <div id="square" top="top" left="left"></div>
@@ -25,7 +25,7 @@ and `centery`.
 
 ---------------
 
-### "Can I have an alternative syntax, please"
+### Alternative syntax
 
 ```html example solid_sized
 <div id="square" ui4="top=top; left=left"></div>
@@ -37,7 +37,7 @@ no effect on the final result.
 
 ---------------
 
-### "Connect A to B"
+### Connect peer elements
 
 ```html example solid_sized
 <div id="a" top="b.bottom" left="b.left">A</div>
@@ -50,7 +50,7 @@ whenever they are "pushing" against each other.
 
 ---------------
 
-### "I want them closer, and I am not afraid of some math"
+### Fine-tuning
 
 ```html example solid_sized
 <div id="a" top="b.bottom-(gap-1)" left="b.left">A</div>
@@ -67,7 +67,7 @@ is used to make sure there is only 1 pixel between A and B, no matter what the g
 
 ---------------
 
-### "Just put it in the center"
+### Docking shortcuts
 
 ```html example solid_sized
 <div id="centered" dock="center"></div>
@@ -78,7 +78,7 @@ convenient and easier-to-read options.
 
 ---------------
 
-### "This is a top banner"
+### Docking to edges
 
 ```html example solid
 <div id="topBanner" dock="top" height="30"></div>
@@ -95,7 +95,7 @@ All the options for docking to the parent are:
 
 ---------------
 
-### "Put A above B"
+### Dock to a peer element
 
 ```html example solid 1
 <div id="a" dock="b.above" height="30">A</div>
@@ -107,7 +107,7 @@ beside another one and set the shared dimension (width in the example above) to 
 
 ---------------
 
-### "A should be between these two guys"
+### Docking between other elements
 
 ```html example solid 3
 <div id="b" dock="left" width="40">B</div>
@@ -124,7 +124,7 @@ and position).
 
 ---------------
 
-### "...no, I mean stretched all the way between them"
+### Filling the available space
 
 ```html example solid 3
 <div id="b" dock="left" width="40">B</div>
@@ -134,22 +134,33 @@ and position).
 
 ---------------
 
-### "This is a third of the size of the whole thing"
+### Fix the aspect ratio
+
+```html example solid
+<div centery="centery" centerx="width/3" width="100" ratio="16/9"></div>
+<div centery="centery" centerx="width*2/3" height="100" ratio="16/9"></div>
+```
+
+Using `ratio` can be more readable than an equivalent `width="100" height="this.width * 9/16"`.
+
+---------------
+
+### Taking a relative share of the available space
 
 ```html example solid 1
-<div id="one_third" dock="left" width="share(1, 3)"></div>
-<div id="another" style="background-color: #eeeeee" dock="one_third.rightof" width="share(1, 3)"></div>
-<div id="and_another" style="background-color: #eeeeee" dock="right" width="share(1, 3)"></div>
+<div dock="left" width="share(1, 3)"></div>
+<div dock="center" height="previous.height" width="share(1, 3)" style="background-color: #eeeeee" ></div>
+<div dock="right" width="share(1, 3)" style="background-color: #eeeeee" ></div>
 ```
 
 Because of the gaps, just dividing the width by 3 is not accurate, so we use a convenience function
 for getting "gap-observing" shares of the whole.
 
-Of course, rather than managing sizes like this, you want to...
+Of course, rather than managing sizes like this, you might want to use a ...
 
 ---------------
 
-### "Just throw some boxes in there"
+### Grid
 
 ```html example solid_resizable
 <div id="resizable" layout="grid">
