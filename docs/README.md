@@ -1,5 +1,3 @@
-HTML layouts made easy.
-
-![Animation introducing some basics features](intro.gif)
+*_Painless HTML layouts!_*
 
 ![Animation as video](intro.mov)
