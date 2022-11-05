@@ -318,7 +318,7 @@ class UI4 {
     this.checkDependencies();
   }
 
-  set(elementOrID, dependency) {
+  set(elementOrID, dependency, animationOptions) {
     let element = elementOrID;
     if (typeof elementOrID === "string") {
       element = document.getElementById(elementOrID);
@@ -328,6 +328,9 @@ class UI4 {
     const lockedCSSPropertiesBeforeChange = this.activeCSSProperties(targetID, element);
 
     const newDependencies = this.parseAndCleanDependencies(element, dependency);
+    if (animationOptions) {
+      newDependencies.forEach((dependency) => (dependency.animation = animationOptions));
+    }
     const newAttributes = new Set(newDependencies.map((dependency) => dependency.targetAttribute));
     const existingDependencies = this.allDependencies[targetID] || [];
     existingDependencies.forEach((dependency) => {
@@ -481,6 +484,7 @@ class UI4 {
         }
       }
     }
+
     /*
         // Check animated styles
         const ui4Style = node.getAttribute('ui4style');
@@ -534,7 +538,11 @@ class UI4 {
 
     for (const attribute of node.attributes) {
       const name = attribute.name;
-      if (name in this.setValue || name in UI4.composites || ["dock", "fit", "layout", "gap", "ratio"].includes(name)) {
+      if (
+        name in this.setValue ||
+        name in UI4.composites ||
+        ["dock", "fit", "layout", "gap", "ratio", "click"].includes(name)
+      ) {
         for (const singleConstraint of attribute.value.split(";")) {
           const fullConstraint = `${attribute.name}=${singleConstraint}`;
           constraintArray.push(fullConstraint);
@@ -570,12 +578,10 @@ class UI4 {
             attribute = "width";
           }
           if (sourceSpec) {
-            console.log(sourceSpec);
             const tempDependencies = [];
             this.parseCoreSpec(node, attribute, "=", sourceSpec, tempDependencies, dependency.animation);
             const newDependency = tempDependencies[0];
             dependencies[index] = newDependency;
-            console.log(JSON.stringify(newDependency));
             targetAttributeSet.add(attribute);
           } else {
             console.error("ratio is only effective if exactly one of width and height is defined");
@@ -641,11 +647,11 @@ class UI4 {
       }
       let targetAttribute, comparison, sourceSpec;
       for (const comparisonCandidate of Object.keys(UI4.comparisons)) {
-        const targetAttributeAndSourceSpec = coreSpec.split(comparisonCandidate);
+        const targetAttributeAndSourceSpec = coreSpec.split(comparisonCandidate, 2);
         if (targetAttributeAndSourceSpec.length === 2) {
           targetAttribute = targetAttributeAndSourceSpec[0];
           comparison = comparisonCandidate;
-          sourceSpec = targetAttributeAndSourceSpec[1];
+          sourceSpec = coreSpec.substring(targetAttribute.length + 1);
           break;
         }
       }
@@ -775,6 +781,14 @@ class UI4 {
       if (sourceTree) {
         this.layouts[node.id] = sourceTree;
       }
+    } else if (targetAttribute === "click") {
+      const dotIndex = sourceSpec.indexOf(".");
+      let targetNodeId = node.id;
+      if (dotIndex > -1 && dotIndex < sourceSpec.indexOf("=")) {
+        targetNodeId = sourceSpec.substring(0, dotIndex);
+        sourceSpec = sourceSpec.substring(dotIndex + 1);
+      }
+      node.addEventListener("click", this.set.bind(this, targetNodeId, sourceSpec, animationOptions));
     } else if (targetAttribute === "gap") {
       this.gaps[node.id] = parseFloat(sourceSpec);
     } else {
@@ -1067,28 +1081,34 @@ class UI4 {
       for (const [targetAttribute, data] of Object.entries(finalValues)) {
         const updates = this.setValue[targetAttribute](data.context, data.sourceValue);
         for (const [key, value] of Object.entries(updates)) {
-          console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
-          const oldValue = targetElem.style[key];
+          let oldValue = targetElem.style[key];
+          console.log("Should apply? Old value: " + oldValue);
+          console.log("Old value type: " + typeof oldValue + ", new value type: " + typeof value);
           if (!oldValue) {
+            console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
             targetElem.style[key] = value;
             continue;
           }
-
-          // Remove oscillating jitter caused by floating point rounding error
-          const valueAsNumber = parseFloat(value);
-          const valueKey = `${targetID}.${targetAttribute}`;
-          this.previousValues[valueKey] = this.previousValues[valueKey] || [];
-          const values = this.previousValues[valueKey];
-          values.push(valueAsNumber);
-          if (values.length === 6) {
-            values.shift();
-            const oddValue = new Set([values[1], values[3], values[5]]);
-            const evenValue = new Set([values[1], values[3], values[5]]);
-            if (!(oddValue.size === 1 && evenValue.size === 1 && oddValue.values()[0] === evenValue.values()[0])) {
+          oldValue = parseFloat(oldValue);
+          if (oldValue !== value) {
+            // Remove oscillating jitter caused by floating point rounding error
+            const valueAsNumber = parseFloat(value);
+            const valueKey = `${targetID}.${targetAttribute}`;
+            this.previousValues[valueKey] = this.previousValues[valueKey] || [];
+            const values = this.previousValues[valueKey];
+            values.push(valueAsNumber);
+            if (values.length === 6) {
+              values.shift();
+              const oddValue = new Set([values[1], values[3], values[5]]);
+              const evenValue = new Set([values[1], values[3], values[5]]);
+              if (!(oddValue.size === 1 && evenValue.size === 1 && oddValue.values()[0] === evenValue.values()[0])) {
+                console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
+                targetElem.style[key] = value;
+              }
+            } else {
+              console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
               targetElem.style[key] = value;
             }
-          } else {
-            targetElem.style[key] = value;
           }
         }
       }
