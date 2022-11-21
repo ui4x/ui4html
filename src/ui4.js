@@ -1369,9 +1369,10 @@ class UI4 {
     });
   }
 
-  grid_dimensions(count, width, height) {
-    const initialX = Math.min(count, Math.sqrt((count * width) / height));
-    const initialY = Math.min(count, Math.sqrt((count * height) / width));
+  grid_dimensions(count, width, height, ratio) {
+    if (!ratio) ratio = 1.0;
+    const initialX = Math.min(count, Math.sqrt((count * width) / (ratio * height)));
+    const initialY = Math.min(count, Math.sqrt((count * ratio * height) / width));
     const operations = [
       [Math.floor, Math.floor],
       [Math.floor, Math.ceil],
