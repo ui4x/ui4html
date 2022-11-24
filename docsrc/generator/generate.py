@@ -6,6 +6,7 @@ source_path = Path(__file__).parent.parent
 root = source_path.parent
 target_path = root / "docs"
 examples_path = target_path / "examples"
+demos_path = target_path / "demos"
 
 for file_path in sorted(source_path.glob("*.md")):
     file_number = file_path.stem[:2]
@@ -83,3 +84,4 @@ for file_path in sorted(source_path.glob("*.md")):
 
 
 shutil.copy(str(root / "src" / "ui4.js"), examples_path / "ui4.js")
+shutil.copy(str(root / "src" / "ui4.js"), demos_path / "ui4.js")

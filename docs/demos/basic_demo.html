@@ -1,0 +1,66 @@
+<html>
+<head>
+    <meta charset="utf-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+
+    <title>ui4 Basic Demo</title>
+    <script src="../../src/ui4.js"></script>
+    <style>
+        button {
+            background-color: #1E90FFCC; color: white; border-radius: 5px; border-width: 0; height: 30px; font-weight: bold;
+        }
+        [id$=Button] {
+            width: 100px;
+        }
+        #shareArea {background-color: lightcyan; border-radius: 5px; border: solid #1E90FFCC;
+        }}
+    </style>
+</head>
+<body>
+<div id="root" class="ui4Root">
+    <button id="firstButton" top="root.top" left="root.left">
+        First
+    </button>
+    <button id="nextButton" top="root.top" left="firstButton.right">
+        Next
+    </button>
+    <button id="dockButton" dock="topright">
+        Dock
+    </button>
+    <button id="centerButton" center="root.center">
+        Center
+    </button>
+    <button id="peerButton" dock="centerButton.below">
+        Below
+    </button>
+    <button id="filled" dock="bottom">
+        Bottom filled
+    </button>
+    <button id="betweenEdges" dock="between(nextButton.right, dockButton.left)">
+        Between
+    </button>
+    <button id="centersBetweenButton" dock="between(firstButton, centerButton)">
+        Between
+    </button>
+    <button id="floatingButton"
+            centerx="(centerButton.centerx + dockButton.centerx) / 2" bottom="max(centerButton.bottom, 300)">
+        Floating
+    </button>
+    <button id="share1" centery="root.height*3/4" left="root.left" width="share(1, 3)">
+        Share 1/3
+    </button>
+    <button id="share2" dock="share1.rightof" width="0.5 * share(1, 3) - gap/2">
+        Share half of 1/3
+    </button>
+    <div id="shareArea" top="share2.top" left="share2.right" bottom="filled.top" width="share(1, 2)">
+        <button id="share3" dock="top" height="share(1,3)">
+            Share 1/3
+        </button>
+        <button id="share4" dock="share3.below" height="share(2,3)">
+            Share 2/3
+        </button>
+    </div>
+</div>
+</body>
+</html>
