@@ -144,6 +144,8 @@ class UI4 {
   static FUNCTION = "function";
 
   constructor() {
+    this.observer = new UI4.Observer(this.setDependencies.bind(this), this.checkDependentsOf.bind(this));
+
     this._gap = 8;
     this.idCounter = 0;
 
@@ -305,6 +307,10 @@ class UI4 {
     });
   }
 
+  init() {
+    this.observer.startClassObserver();
+  }
+
   // Gap is the only externally-settable parameter
   gap(elementID) {
     if (elementID in this.gaps) {
@@ -397,73 +403,24 @@ class UI4 {
     return ((parentDimension - (total + 1) * gap) / total) * shareOf + (shareOf - 1) * gap;
   }
 
-  setResizeObserver(node) {
-    const sourceID = node.id;
-    if (!sourceID) {
-      return;
-    }
-    const resizeObserver = new ResizeObserver(this.checkSourceDependencies.bind(this));
-    resizeObserver.observe(node);
-  }
-
-  startClassObserver() {
-    const observer = new MutationObserver(this.classChangeHandler.bind(this));
-    observer.observe(document, {
-      subtree: true,
-      childList: true,
-      attributeFilter: ["ui4"],
-    });
-  }
-
-  classChangeHandler(mutations, observer) {
-    mutations.forEach((mutation) => {
-      switch (mutation.type) {
-        case "childList":
-          mutation.addedNodes.forEach((node) => {
-            if (node.getAttribute) {
-              this.setDependencies(node);
-              this.setResizeObserver(node);
-            }
-          });
-          break;
-        case "attributes":
-          if (mutation.target.getAttribute) {
-            this.setDependencies(mutation.target);
-            this.setResizeObserver(mutation.target);
-          }
-          break;
-      }
-    });
-  }
-
-  // startTracking() {
-  //     const observer = new MutationObserver(this.checkDependencies.bind(this));
-  //     observer.observe(document.body, {
-  //         subtree: true,
-  //         childList: true,
-  //         attributeFilter: ["style"]
-  //     });
-  //     this.checkDependencies();
-  // }
-
-  setDependencies(node) {
+  setDependencies(element) {
     // We need the node to have an id from this point forward
-    if (!node.id) {
-      if (!node.getAttribute) return;
-      node.id = "ui4id" + this.idCounter++;
+    if (!element.id) {
+      if (!element.getAttribute) return;
+      element.id = "ui4id" + this.idCounter++;
     }
-    const targetID = node.id;
+    const targetID = element.id;
 
     // this.gaps[targetID] = undefined;
 
-    // const ui4AnimationID = node.getAttribute("ui4anim");
+    // const ui4AnimationID = element.getAttribute("ui4anim");
 
-    const ui4Attr = this.checkStyles(node);
+    const ui4Attr = this.checkStyles(element);
 
     if (ui4Attr) {
       let dependencies;
       try {
-        dependencies = this.parseAndCleanDependencies(node, ui4Attr);
+        dependencies = this.parseAndCleanDependencies(element, ui4Attr);
       } catch (error) {
         console.error(error);
         return;
@@ -503,7 +460,7 @@ class UI4 {
         }
         */
     // Check children, since mutation observer only seems to pick the root of changes
-    node.childNodes.forEach((childNode) => this.setDependencies(childNode));
+    element.childNodes.forEach((childNode) => this.setDependencies(childNode));
   }
 
   setSourceDependencies(targetID, dependency) {
@@ -1066,6 +1023,15 @@ class UI4 {
     }
   }
 
+  checkDependentsOf(source) {
+    const dependents = this.sourceDependencies[source.id];
+    if (dependents) {
+      Object.keys(dependents).forEach((dependentID) => {
+        this.checkDependenciesFor(dependentID);
+      });
+    }
+  }
+
   checkDependenciesFor(targetID) {
     let redrawNeeded = false;
     if (targetID in this.allDependencies) {
@@ -1081,33 +1047,45 @@ class UI4 {
       for (const [targetAttribute, data] of Object.entries(finalValues)) {
         const updates = this.setValue[targetAttribute](data.context, data.sourceValue);
         for (const [key, value] of Object.entries(updates)) {
-          let oldValue = targetElem.style[key];
+          const oldValue = targetElem.style[key];
           console.log("Should apply? Old value: " + oldValue);
           if (!oldValue) {
             console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
             targetElem.style[key] = value;
             continue;
           }
-          oldValue = parseFloat(oldValue);
-          if (oldValue !== value) {
-            // Remove oscillating jitter caused by floating point rounding error
-            const valueAsNumber = parseFloat(value);
-            const valueKey = `${targetID}.${targetAttribute}`;
-            this.previousValues[valueKey] = this.previousValues[valueKey] || [];
-            const values = this.previousValues[valueKey];
-            values.push(valueAsNumber);
-            if (values.length === 6) {
-              values.shift();
-              const oddValue = new Set([values[1], values[3], values[5]]);
-              const evenValue = new Set([values[1], values[3], values[5]]);
-              if (!(oddValue.size === 1 && evenValue.size === 1 && oddValue.values()[0] === evenValue.values()[0])) {
-                console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
-                targetElem.style[key] = value;
+          const oldValueFloat = Math.round(parseFloat(oldValue));
+          const valueFloat = Math.round(parseFloat(value));
+          if (oldValueFloat !== valueFloat) {
+            console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
+            if (typeof value === "string") {
+              if (value.endsWith("px")) {
+                targetElem.style[key] = `${valueFloat}px`;
+              } else {
+                targetElem.style[key] = valueFloat.toString();
               }
             } else {
-              console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
               targetElem.style[key] = value;
             }
+
+            // Remove oscillating jitter caused by floating point rounding error
+            // const valueAsNumber = parseFloat(value);
+            // const valueKey = `${targetID}.${targetAttribute}`;
+            // this.previousValues[valueKey] = this.previousValues[valueKey] || [];
+            // const values = this.previousValues[valueKey];
+            // values.push(valueAsNumber);
+            // if (values.length === 6) {
+            //   values.shift();
+            //   const oddValue = new Set([values[1], values[3], values[5]]);
+            //   const evenValue = new Set([values[1], values[3], values[5]]);
+            //   if (!(oddValue.size === 1 && evenValue.size === 1 && oddValue.values()[0] === evenValue.values()[0])) {
+            //     console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
+            //     targetElem.style[key] = value;
+            //   }
+            // } else {
+            //   console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
+            //   targetElem.style[key] = value;
+            // }
           }
         }
       }
@@ -1452,6 +1430,72 @@ class UI4 {
   }
 }
 
+UI4.Observer = class {
+  constructor(setDependencies, checkDependencies) {
+    this.dirties = new Set();
+    this.frame = undefined;
+    this.setDependencies = setDependencies;
+    this.checkDependencies = checkDependencies;
+  }
+
+  startClassObserver() {
+    const observer = new MutationObserver(this.classChangeHandler.bind(this));
+    observer.observe(document, {
+      subtree: true,
+      childList: true,
+      attributes: true,
+    });
+  }
+
+  classChangeHandler(mutations, observer) {
+    mutations.forEach((mutation) => {
+      switch (mutation.type) {
+        case "childList":
+          mutation.addedNodes.forEach((node) => {
+            if (node.getAttribute) {
+              this.setDependencies(node);
+              this.setResizeObserver(node);
+            }
+          });
+          break;
+        case "attributes":
+          if (mutation.target.getAttribute) {
+            this.mutationHandler(mutation.target);
+          }
+          break;
+      }
+    });
+  }
+
+  setResizeObserver(element) {
+    const sourceID = element.id;
+    if (!sourceID) {
+      return;
+    }
+    new ResizeObserver(this.resizeEntriesHandler.bind(this)).observe(element, { box: "border-box" });
+  }
+
+  resizeEntriesHandler(entries) {
+    entries.forEach((entry) => {
+      this.mutationHandler(entry.target);
+    });
+  }
+
+  mutationHandler(target) {
+    this.dirties.add(target);
+    if (this.frame) window.cancelAnimationFrame(this.frame);
+    this.frame = requestAnimationFrame(this.animationFrame.bind(this));
+  }
+
+  animationFrame() {
+    this.frame = undefined;
+    this.dirties.forEach((element) => {
+      this.checkDependencies(element);
+    });
+    this.dirties.clear();
+  }
+};
+
 // UI4 ATTRIBUTE PARSER
 
 UI4.Parser = class {
@@ -1697,6 +1741,5 @@ if (new Function("try {return this === global;} catch(e) {return false;}")()) {
   module.exports = UI4;
 } else {
   var ui4 = new UI4();
-  ui4.startClassObserver();
-  //window.onload = ui4.startTracking.bind(ui4);
+  ui4.init();
 }
