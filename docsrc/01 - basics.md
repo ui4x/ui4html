@@ -137,11 +137,12 @@ and position).
 ### Fix the aspect ratio
 
 ```html example solid
-<div centery="centery" centerx="width/3" width="100" ratio="16/9"></div>
-<div centery="centery" centerx="width*2/3" height="100" ratio="16/9"></div>
+<div centery="centery" centerx="width/3" width=40 ratio="16/9"></div>
+<div centery="centery" centerx="width*2/3" height=40 ratio="16/9"></div>
 ```
 
-Using `ratio` can be more readable than an equivalent `width="100" height="this.width * 9/16"`.
+Point of `ratio` is to make the aspect ratio visible and easily readable. For squares (`ratio="1"`),
+it lets you adjust just one dimension to change the size of the square.
 
 ---------------
 
