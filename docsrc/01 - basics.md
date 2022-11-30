@@ -81,7 +81,7 @@ convenient and easier-to-read options.
 ### Docking to edges
 
 ```html example solid
-<div id="topBanner" dock="top" height="30"></div>
+<div id="topBanner" dock="top" height=30></div>
 ```
 
 Docking to the top connects the left, top and right edges of the element; bottom or height is set
@@ -98,8 +98,8 @@ All the options for docking to the parent are:
 ### Dock to a peer element
 
 ```html example solid 1
-<div id="a" dock="b.above" height="30">A</div>
-<div id="b" dock="center" width="50" height="30">B</div>
+<div id="a" dock="b.above" height=30>A</div>
+<div id="b" dock="center" width=50 height=30>B</div>
 ```
 
 These convenience docking options, `above`, `below`, `rightof` and `leftof`, place the element
@@ -110,8 +110,8 @@ beside another one and set the shared dimension (width in the example above) to 
 ### Docking between other elements
 
 ```html example solid 3
-<div id="b" dock="left" width="40">B</div>
-<div id="c" dock="right" width="40">C</div>
+<div id="b" dock="left" width=40>B</div>
+<div id="c" dock="right" width=40>C</div>
 <div id="a" dock="between(b, c)" size="b.size">A</div>
 ```
 
@@ -127,8 +127,8 @@ and position).
 ### Filling the available space
 
 ```html example solid 3
-<div id="b" dock="left" width="40">B</div>
-<div id="c" dock="right" width="40">C</div>
+<div id="b" dock="left" width=40>B</div>
+<div id="c" dock="right" width=40>C</div>
 <div id="a" dock="between(b.right, c.left)">A</div>
 ```
 
@@ -150,14 +150,15 @@ it lets you adjust just one dimension to change the size of the square.
 
 ```html example solid 1
 <div dock="left" width="share(1, 3)"></div>
-<div dock="center" height="previous.height" width="share(1, 3)" style="background-color: #eeeeee" ></div>
-<div dock="right" width="share(1, 3)" style="background-color: #eeeeee" ></div>
+<div dock="center" height="previous.height" width="share(1, 3)"></div>
+<div dock="right" width="share(1, 3)"></div>
 ```
 
 Because of the gaps, just dividing the width by 3 is not accurate, so we use a convenience function
 for getting "gap-observing" shares of the whole.
 
-Of course, rather than managing sizes like this, you might want to use a ...
+Of course, rather than managing sizes like this, for equally-sized elements, you might want to use
+a...
 
 ---------------
 

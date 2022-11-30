@@ -97,7 +97,7 @@ convenient and easier-to-read options.
 
 <sub>EXAMPLE 01.06</sub>
 ```html
-<div id="topBanner" dock="top" height="30"></div>
+<div id="topBanner" dock="top" height=30></div>
 ```
 <iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example_01.06.html"></iframe>
 <a style="color: #404040" href="examples/example_01.06.html">Open in full screen</a>
@@ -117,7 +117,7 @@ All the options for docking to the parent are:
 
 <sub>EXAMPLE 01.07</sub>
 ```html
-<div id="a" dock="b.above" height="30">A</div>
+<div id="a" dock="b.above" height=30>A</div>
 ```
 <iframe style="border:1px solid #404040;border-radius:3px;background-color:#212121;" src="examples/example_01.07.html"></iframe>
 <a style="color: #404040" href="examples/example_01.07.html">Open in full screen</a>
@@ -183,7 +183,8 @@ it lets you adjust just one dimension to change the size of the square.
 Because of the gaps, just dividing the width by 3 is not accurate, so we use a convenience function
 for getting "gap-observing" shares of the whole.
 
-Of course, rather than managing sizes like this, you might want to use a ...
+Of course, rather than managing sizes like this, for equally-sized elements, you might want to use
+a...
 
 ---------------
 

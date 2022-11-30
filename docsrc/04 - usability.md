@@ -26,15 +26,15 @@ because logically `right` cannot be anywhere else but as far to the right from `
 is to the left of it.
 
 ```html example button_solid 11
-<div id="behind" style="background-color: #6495ED55" centery="centery" left="centerx-100" right="right" height="50"></div>
+<div id="behind" style="background-color: #6495ED55" centery="centery" left="centerx-100" right="right" height=50></div>
 <div right="behind.left" centery="centery">left</div>
-<div centerx="behind.left-1" top="behind.top" bottom="behind.bottom" width="2" style="background-color: black"></div>
+<div centerx="behind.left-1" top="behind.top" bottom="behind.bottom" width=2 style="background-color: black"></div>
 <div centerx="centerx" bottom="behind.top-gap">centerx</div>
-<div centerx="centerx" top="behind.top-gap" bottom="behind.bottom+gap" width="2" style="background-color: black"></div>
+<div centerx="centerx" top="behind.top-gap" bottom="behind.bottom+gap" width=2 style="background-color: black"></div>
 <div style="color: grey" id="discarded" right="right" bottom="behind.top-gap">right</div>
 <div center="discarded.center" style="font-size: 20px; color: red">X</div> 
 <div right="right" top="behind.top-gap" bottom="behind.bottom+gap" width="2" style="background-color: grey"></div>
-<div id="arrow" style="background-color: grey" centery="behind.centery" right="right" left="centerx+100+gap" height="2"></div>
+<div id="arrow" style="background-color: grey" centery="behind.centery" right="right" left="centerx+100+gap" height=2></div>
 <div style="color: grey" centery="arrow.centery" centerx="arrow.left">◀︎</div>
 <button dock="center" left="centerx-100" right="right" height="50"></button>
 ```

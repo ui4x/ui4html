@@ -447,7 +447,7 @@ class UI4 {
       const sources = this.sourceDependencies[targetID] || {};
       sources[parentID] = true;
       this.sourceDependencies[targetID] = sources;
-      console.log(targetID + " -> " + parentID);
+      // console.log(targetID + " -> " + parentID);
     }
     /*
         // Check animated styles
@@ -1031,16 +1031,23 @@ class UI4 {
   }
 
   checkDependentsOf(source) {
-    const dependents = this.sourceDependencies[source.id];
+    const sourceID = source.id;
+    const dependents = this.sourceDependencies[sourceID];
     if (dependents) {
       Object.keys(dependents).forEach((dependentID) => {
         this.checkDependenciesFor(dependentID);
       });
     }
+
+    const layout = this.layouts[sourceID];
+    if (layout) {
+      this.updateLayout(source, layout);
+    }
   }
 
   checkDependenciesFor(targetID) {
     let redrawNeeded = false;
+    // console.log("Checking " + targetID);
     if (targetID in this.allDependencies) {
       const targetElem = document.getElementById(targetID);
       let checkResults = this.checkResults(targetID);
@@ -1078,21 +1085,16 @@ class UI4 {
         }
       }
     }
+  }
 
-    // Apply layouts, if any, to children, if any
-    const layouts = this.layouts[targetID];
-    if (layouts) {
-      const container = document.getElementById(targetID);
-      if (layouts.value === "grid") {
-        this.grid_layout(container);
-      } else if (layouts.value === "columns") {
-        this.grid_layout(container, layouts.args[0].value, undefined);
-      } else if (layouts.value === "rows") {
-        this.grid_layout(container, undefined, layouts.args[0].value);
-      }
+  updateLayout(container, layout) {
+    if (layout.value === "grid") {
+      this.grid_layout(container);
+    } else if (layout.value === "columns") {
+      this.grid_layout(container, layout.args[0].value, undefined);
+    } else if (layout.value === "rows") {
+      this.grid_layout(container, undefined, layout.args[0].value);
     }
-
-    return redrawNeeded;
   }
 
   checkResults(targetID) {
@@ -1478,6 +1480,7 @@ UI4.Observer = class {
   animationFrame() {
     this.frame = undefined;
     this.dirties.forEach((element) => {
+      // console.log("Frame: " + element.id);
       this.checkDependencies(element);
     });
     this.dirties.clear();
