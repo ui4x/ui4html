@@ -442,6 +442,13 @@ class UI4 {
       }
     }
 
+    const parentID = element.parentElement.id;
+    if (parentID && this.layouts[parentID]) {
+      const sources = this.sourceDependencies[targetID] || {};
+      sources[parentID] = true;
+      this.sourceDependencies[targetID] = sources;
+      console.log(targetID + " -> " + parentID);
+    }
     /*
         // Check animated styles
         const ui4Style = node.getAttribute('ui4style');
@@ -1048,16 +1055,16 @@ class UI4 {
         const updates = this.setValue[targetAttribute](data.context, data.sourceValue);
         for (const [key, value] of Object.entries(updates)) {
           const oldValue = targetElem.style[key];
-          console.log("Should apply? Old value: " + oldValue);
+          //console.log("Should apply? Old value: " + oldValue);
           if (!oldValue) {
-            console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
+            //console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
             targetElem.style[key] = value;
             continue;
           }
           const oldValueFloat = Math.round(parseFloat(oldValue));
           const valueFloat = Math.round(parseFloat(value));
           if (oldValueFloat !== valueFloat) {
-            console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
+            //console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
             if (typeof value === "string") {
               if (value.endsWith("px")) {
                 targetElem.style[key] = `${valueFloat}px`;
@@ -1067,25 +1074,6 @@ class UI4 {
             } else {
               targetElem.style[key] = value;
             }
-
-            // Remove oscillating jitter caused by floating point rounding error
-            // const valueAsNumber = parseFloat(value);
-            // const valueKey = `${targetID}.${targetAttribute}`;
-            // this.previousValues[valueKey] = this.previousValues[valueKey] || [];
-            // const values = this.previousValues[valueKey];
-            // values.push(valueAsNumber);
-            // if (values.length === 6) {
-            //   values.shift();
-            //   const oddValue = new Set([values[1], values[3], values[5]]);
-            //   const evenValue = new Set([values[1], values[3], values[5]]);
-            //   if (!(oddValue.size === 1 && evenValue.size === 1 && oddValue.values()[0] === evenValue.values()[0])) {
-            //     console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
-            //     targetElem.style[key] = value;
-            //   }
-            // } else {
-            //   console.log("Apply: " + targetID + "." + targetAttribute + ": " + key + "=" + value);
-            //   targetElem.style[key] = value;
-            // }
           }
         }
       }
@@ -1114,7 +1102,7 @@ class UI4 {
     let redrawNeeded = false;
 
     dependencies.forEach((dependency) => {
-      console.log("Check: " + targetID + "." + dependency.targetAttribute);
+      //console.log("Check: " + targetID + "." + dependency.targetAttribute);
       if (dependency.animation && dependency.animation.running) {
         redrawNeeded = true;
         return;

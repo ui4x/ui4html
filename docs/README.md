@@ -33,7 +33,9 @@ Here's the code from the video above, and some highlighted ui4 features:
 
 ## Getting started
 
-TBD
+Load the ui4.js file from github or include it from CDN with:
+
+
 
 ## Documentation
 
