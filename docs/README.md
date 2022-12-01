@@ -2,10 +2,16 @@
     <source src="intro.mp4" type="video/mp4">
 </video>
 
-ui4html brings layout close to the element definitions. ui4 mindset is focused on building an
-**app UI** quickly and intuitively, not typographically finessing an HTML **document**.
+## Introduction
 
-Here's the code from the video above, and some highlighted ui4 features:
+`ui4html` brings layout to the HTML,  close to the element definitions. It is a good fit if you want
+to create a web-based **app UI** quickly and intuitively, as opposed to finessing the look and feel
+of an HTML **document**.
+
+`ui4html` gives you "strict flexibility". UI elements are placed strictly ("Place this element
+below that one") but flexibly ("And keep it there when it moves"). 
+
+Here's the code from the video above, and some highlighted `ui4html` features:
 
 ```html
 <div fit="true" dock="center">
@@ -49,7 +55,13 @@ Dig deeper in these sections:
 
 1. [Basics](01-BASICS) cover element placement on the page.
 2. Page layouts can be made more [responsive](02-RESPONSIVE) with conditions and layouts.
-3. There is some support for animations.
-4. Developer usability is making sure that things work as you expect.
-5. Reference has everything listed.
-6. Research contains notes on similar packages in other environments.
+3. There is some support for [animations](03-ANIMATION).
+4. Developer [usability](04-USABILITY) is making sure that things work as you expect.
+5. [Reference](05-REFERENCE) has everything listed.
+6. Notes on similar packages in other environments can be found in [research](06-RESEARCH).
+
+## Simple samples
+
+1. [Calculator](demos/calculator.html) - may look familiar to you.
+2. [Lorem Picsum browser](demos/lorem_picsum_browser.html) - using images from the excellent
+   Lorem Picsum [service](https://picsum.photos).
