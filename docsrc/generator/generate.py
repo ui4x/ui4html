@@ -83,5 +83,5 @@ for file_path in sorted(source_path.glob("*.md")):
     print(f"Examples in {target_file_name} {str(file_path)}: {example_number}")
 
 
-shutil.copy(str(root / "src" / "ui4.js"), examples_path / "ui4.js")
-shutil.copy(str(root / "src" / "ui4.js"), demos_path / "ui4.js")
+# shutil.copy(str(root / "src" / "ui4.js"), examples_path / "ui4.js")
+# shutil.copy(str(root / "src" / "ui4.js"), demos_path / "ui4.js")
