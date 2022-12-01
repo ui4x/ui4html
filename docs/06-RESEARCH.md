@@ -1,6 +1,6 @@
 ---
 layout: page
-title: Related
+title: Research
 ---
 
 _Similar works and things to learn from them:_

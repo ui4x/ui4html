@@ -1,5 +1,3 @@
-## Painless HTML UIs
-
 <video controls="" muted="" loop="" autoplay="" width="100%">
     <source src="intro.mp4" type="video/mp4">
 </video>
@@ -33,10 +31,25 @@ Here's the code from the video above, and some highlighted ui4 features:
 
 ## Getting started
 
-Load the ui4.js file from github or include it from CDN with:
+Include the latest version of `ui4.js` on your page from the CDN with:
 
+```html
+<script src="https://unpkg.com/ui4html"></script>
+```
 
+Or fixed to a specific version:
+
+```html
+<script src="https://unpkg.com/ui4html@0.8.0/dist/ui4.js"></script>
+```
 
 ## Documentation
 
-TBD
+Dig deeper in these sections:
+
+1. [Basics](01-BASICS) cover element placement on the page.
+2. Page layouts can be made more [responsive](02-RESPONSIVE) with conditions and layouts.
+3. There is some support for animations.
+4. Developer usability is making sure that things work as you expect.
+5. Reference has everything listed.
+6. Research contains notes on similar packages in other environments.
