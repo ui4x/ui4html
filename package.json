@@ -15,7 +15,7 @@
   "name": "ui4html",
   "homepage": "https://ui4x.github.io/ui4html/",
   "description": "Intuitive web layout",
-  "version": "0.8.0",
+  "version": "0.8.3",
   "browser": "dist/ui4.js",
   "unpkg": "dist/ui4.js",
   "directories": {

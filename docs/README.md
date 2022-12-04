@@ -62,6 +62,20 @@ Dig deeper in these sections:
 
 ## Simple samples
 
-1. [Calculator](demos/calculator.html) - may look familiar to you.
+1. [Calculator](demos/calculator.html) - may look familiar, and demonstrates a boring but
+   flexible way of placing semi-repetitive elements in a grid.
 2. [Lorem Picsum browser](demos/lorem_picsum_browser.html) - using images from the excellent
-   Lorem Picsum [service](https://picsum.photos).
+   Lorem Picsum [service](https://picsum.photos), demonstrates resizing the whole layout with the
+   size of the screen.
+
+## To do
+
+1. ~~Conditions~~
+2. Text sizing
+3. Animation with right/bottom
+4. ~~Grids and aspect ratios~~
+5. Open-ended grids
+6. Side menu sample
+7. Docs: Reactive
+8. Docs: Animation
+9. Docs: Reference

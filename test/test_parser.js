@@ -57,6 +57,13 @@ describe("Parser.parse", () => {
       ],
     });
   });
+  it("accepts functions without arguments", async () => {
+    expect(parser.parse("share")).to.deep.equal({
+      type: "function",
+      value: "share",
+      args: [],
+    });
+  });
   it("errors with garbage", async () => {
     const freshParser = new Parser();
     expect(freshParser.parse.bind(freshParser, "garbage")).to.throw(
@@ -77,13 +84,6 @@ describe("Parser.parse", () => {
     expect(freshParser.parse.bind(freshParser, "min(2, 3")).to.throw(
       SyntaxError,
       /Expected comma or closing parenthesis/
-    );
-  });
-  it("errors with function without parameters", async () => {
-    const freshParser = new Parser();
-    expect(freshParser.parse.bind(freshParser, "min+1")).to.throw(
-      SyntaxError,
-      /Function name should be followed by parenthesis/
     );
   });
   it("creates a walkable tree", async () => {
@@ -130,5 +130,45 @@ describe("Parser.parseAnimation", () => {
       SyntaxError,
       /Could not recognize token starting from \"garbage\"/
     );
+  });
+});
+
+describe("Parser.parseCondition", () => {
+  it("returns empty object for an empty string", async () => {
+    expect(parser.parseCondition("")).to.deep.equal({});
+  });
+  it("parses a comparison", async () => {
+    expect(parser.parseCondition("1<=2")).to.deep.equal({
+      type: "operator",
+      operator: "<=",
+      left: {
+        type: "number",
+        value: 1,
+      },
+      right: {
+        type: "number",
+        value: 2,
+      },
+    });
+  });
+  it("parses a more complex comparison", async () => {
+    expect(parser.parseCondition("id1.width>id2.width")).to.deep.equal({
+      type: "operator",
+      operator: ">",
+      left: {
+        type: "idAndAttribute",
+        value: {
+          attribute: "width",
+          id: "id1",
+        },
+      },
+      right: {
+        type: "idAndAttribute",
+        value: {
+          attribute: "width",
+          id: "id2",
+        },
+      },
+    });
   });
 });
